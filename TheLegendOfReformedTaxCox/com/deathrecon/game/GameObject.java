@@ -23,6 +23,7 @@ public abstract class GameObject {
 	private int height;
 	private int width;
 	private int HP;
+	private boolean talkProx;
 	private boolean wait;
 	private Handler handler;
 	private TileHandler tileHandler;
@@ -131,6 +132,12 @@ public abstract class GameObject {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	public boolean isTalkProx() {
+		return talkProx;
+	}
+	public void setTalkProx(boolean talkProx) {
+		this.talkProx = talkProx;
 	}
 
 }

@@ -70,13 +70,12 @@ public class KeyInputHandler extends KeyAdapter{
 				if(key == KeyEvent.VK_NUMPAD4) {
 					tileHandler.id = 4;
 				}
-				if(tileHandler.tileMode) {
-					if(key == KeyEvent.VK_NUMPAD5) {
-						tileHandler.id = 5;
-					}
-					if(key == KeyEvent.VK_NUMPAD6) {
-						tileHandler.id = 6;
-					}
+				if(key == KeyEvent.VK_NUMPAD5) {
+					tileHandler.id = 5;
+
+				if(key == KeyEvent.VK_NUMPAD6) {
+					tileHandler.id = 6;
+				}
 				}
 				if(key == KeyEvent.VK_0) {
 					tileHandler.layer = 0;

@@ -37,6 +37,7 @@ public class Handler {
 		GameObject tempHUD;
 		GameObject tempHearts;
 		GameObject tempRupee;
+		GameObject tempNPC;
 		
 		public boolean isUp() {
 			return up;
@@ -111,11 +112,13 @@ public class Handler {
 					changedLevel2 = true;
 					
 				}
+				
 				for(int i = 0; i < entitiesLevel2.size(); i++) {
 					temp = entitiesLevel2.get(i);
 					temp.update();
 				}
 			}
+			
 		}
 		
 		public void render(Graphics g) {
@@ -138,6 +141,7 @@ public class Handler {
 					tempRupee = temp;
 				}else if(temp.getId() == ID.HUD){
 					tempHUD = temp;
+					
 				}else {
 					temp.render(g);
 				}
@@ -193,6 +197,7 @@ public class Handler {
 			}else if(Level2) {
 				for(int i = 0; i < entitiesLevel2.size(); i++){
 					GameObject temp = entitiesLevel2.get(i);
+					
 					temp.update();
 				}
 			}
@@ -279,7 +284,7 @@ public class Handler {
 		}
 		public void addObject(GameObject temp,int level) {
 			if(level == 2) {
-				if(temp.getId() == ID.Enemy || temp.getId() == ID.Chest || temp.getId() == ID.WorldObjectPot) {
+				if(temp.getId() == ID.Enemy || temp.getId() == ID.Chest || temp.getId() == ID.WorldObjectPot || temp.getId() == ID.NPC) {
 					entitiesLevel2.add(temp);
 					if(temp.getId() == ID.Enemy) {
 						temp.setHandler(this);
