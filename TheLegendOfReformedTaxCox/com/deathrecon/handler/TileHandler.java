@@ -19,6 +19,7 @@ import com.deathrecon.Enum.ID;
 import com.deathrecon.Item.Chest;
 import com.deathrecon.NPC.NPC;
 import com.deathrecon.NPC.NPC2;
+import com.deathrecon.NPC.NPC3;
 import com.deathrecon.enemy.Octorok;
 import com.deathrecon.game.GameObject;
 import com.deathrecon.map.BackgroundMove;
@@ -54,6 +55,7 @@ public class TileHandler implements MouseListener{
 		public Octorok currentOcto;
 		public NPC currentNPC;
 		public NPC2 currentNPC2;
+		public NPC3 currentNPC3;
 		public Pot currentPot;
 		public boolean level2Loaded = false;
 		public boolean upBlocked = false;
@@ -464,6 +466,8 @@ public class TileHandler implements MouseListener{
 						
 					}else if(id == 6) {
 						g.drawString("Current ID: NPC2" , 870,970);
+					}else if(id == 7) {
+						g.drawString("Current ID: NPC3" , 870,970);
 					}
 				}
 			}
@@ -545,6 +549,8 @@ public class TileHandler implements MouseListener{
 					
 				}else if(id == 15) {
 					handler.addObject(new NPC2(ID.NPC,x,y,width,height,layer,back,handler,this),2);
+				}else if(id == 16) {
+					handler.addObject(new NPC3(ID.NPC,x,y,width,height,layer,back,handler,this),2);
 				}
 				//Setting level1Loaded to true so the program knows which shared list to add objects to//
 				//(Line 569)//
@@ -608,7 +614,9 @@ public class TileHandler implements MouseListener{
 				}else if(id == 14) {
 					
 				}else if(id == 15) {
-					handler.addObject(new NPC2(ID.Enemy,x,y,width,height,layer,back,handler,this),3);
+					handler.addObject(new NPC2(ID.NPC,x,y,width,height,layer,back,handler,this),3);
+				}else if(id == 16) {
+					handler.addObject(new NPC3(ID.NPC,x,y,width,height,layer,back,handler,this),3);
 				}
 			}
 		}
@@ -694,6 +702,8 @@ public class TileHandler implements MouseListener{
 					id = 14;
 				}else if(id == 6) {
 					id = 15;
+				}else if(id == 7) {
+					id = 16;
 				}
 				if(id == 10) {
 					System.out.println("CURRENT CHEST X: " + (int)currentChest.getX());
@@ -715,6 +725,8 @@ public class TileHandler implements MouseListener{
 				}else if(id == 15) {
 					entityWriter.printf("%d,%d,%d,%d,%d,%d,", id, (int)currentNPC2.getX(),(int)currentNPC2.getY(),currentNPC2.getWidth(),currentNPC2.getHeight(),currentNPC2.getLayer());
 					id = 6;
+				}else if(id == 16) {
+					entityWriter.printf("%d,%d,%d,%d,%d,%d,", id, (int)currentNPC3.getX(),(int)currentNPC3.getY(),currentNPC3.getWidth(),currentNPC3.getHeight(),currentNPC3.getLayer());
 				}
 			    entityWriter.close();
 			}
@@ -870,6 +882,17 @@ public class TileHandler implements MouseListener{
 						currentNPC2.setWidth(70);
 						currentNPC2.setHeight(70);
 						handler.addObject(tempNPC2);
+					}else if(id == 7) {
+						currentNPC3 = new NPC3();
+						NPC3 tempNPC3 = new NPC3(ID.NPC, e.getX() - (int)back.getX(),e.getY() - (int)back.getY(),70,70,layer,back,handler,this);
+						tempNPC3.setTileHandler(this);
+						tempNPC3.instance = true;
+						currentNPC3.setLayer(tempNPC3.getLayer());
+						currentNPC3.setX(tempNPC3.getX());
+						currentNPC3.setY(tempNPC3.getY());
+						currentNPC3.setWidth(70);
+						currentNPC3.setHeight(70);
+						handler.addObject(tempNPC3);
 					}
 					entityPlaced = true;
 				}else {

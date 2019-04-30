@@ -200,9 +200,9 @@ public class NPC extends GameObject {
 			g.drawRect((int)this.getX()-15,(int)this.getY()-25, 60, 55);
 			
 			if(handler.player.getX() <= this.getX()+this.getWidth()+30 && handler.player.getX() > this.getX()-this.getWidth()-30){
-				System.out.println("almost");
+				
 				if(handler.player.getY() < this.getY()+this.getHeight()+ 30 && handler.player.getY() > this.getY() - this.getHeight() -60) {
-					System.out.println("there");
+					
 					g.drawImage(TEXT,(int)this.getX()+20,(int)this.getY()-90,70,70,null);
 				
 				}

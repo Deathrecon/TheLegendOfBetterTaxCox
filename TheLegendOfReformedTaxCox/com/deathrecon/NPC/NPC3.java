@@ -17,7 +17,7 @@ import com.deathrecon.handler.TileHandler;
 import com.deathrecon.map.BackgroundMove;
 import com.deathrecon.player.Player;
 
-public class NPC2 extends GameObject {
+public class NPC3 extends GameObject{
 	public Handler handler;
 	private BufferedImage image;
 	private BufferedImage imageTile;
@@ -56,7 +56,7 @@ public class NPC2 extends GameObject {
 	public boolean talkProx =isTalkProx();
 	private int Timer = 0;
 	
-	public NPC2() {
+	public NPC3() {
 		this.setId(ID.Enemy);
 		this.setX(1205);
 		this.setY(702);
@@ -69,7 +69,7 @@ public class NPC2 extends GameObject {
 		loadImage();
 	}
 	
-	public NPC2(ID id, int x, int y, int height, int width, int layer,BackgroundMove map, Handler handler,TileHandler tileHandler) {
+	public NPC3(ID id, int x, int y, int height, int width, int layer,BackgroundMove map, Handler handler,TileHandler tileHandler) {
 		this.setId(id);
 		this.setX(x);
 		this.setY(y);
@@ -86,8 +86,8 @@ public class NPC2 extends GameObject {
 	private void loadImage() {
 		map = this.getMap();
 		handler = this.getHandler();
-		File file = new File("NPC.png");
-		text = new File("NPC2TEXT.png");
+		File file = new File("Beetle.png");
+		text = new File("BeetleText.png");
 		try {
 			image = ImageIO.read(file);
 		} catch (IOException e) {
@@ -102,63 +102,29 @@ public class NPC2 extends GameObject {
 		}
 	}
 	
-	public void getSprite(int x,int y) {
-		int SIZEX = 18;
+	public void getSprite(int y) {
+		int SIZEX = 20;
 		int SIZEY = 28;
 		if(second) {
 			y+=4;
 		}
-		imageTile = image.getSubimage(x*SIZEX+1, y*SIZEY, 18, 28);
-		if(moving == true) {
-			if(currentFrame < 1) {
-					currentFrame++;
-					if(Timer < 12) {
-						
-						currentFrame = 1;
-						Timer++;
-					}
-			}else {
-				currentFrame = 0;
+		imageTile = image.getSubimage(currentFrame*SIZEX+1, y*SIZEY, 26, 28);
+	if(Timer == 10) {
+			if(movementAnim < 14) {
+					movementAnim++;
+					Timer = 0;
+					if(movementAnim == 13) {
+						movementAnim = 0;
+					}	
+				}
 			}
+		
 			
-		}else {
-			firstRun = true;
-			if(Timer == 4) {
-				Timer = 0;
-			}
-			currentFrame = 0;
-			second = false;
-			subtract = false;
-		}
-	}
+		
+	
+	Timer++;
 
-	public void getMovement() {	
-		if(decision == 0) {
-				moving = true;
-				movementAnim = 4;
-				this.setVelY(7);
-		}
-		
-		if(decision == 1){
-				moving = true;
-				movementAnim = 6;
-				this.setVelY(-7);
-		}
-		
-		if(decision == 2){
-				moving = true;
-				movementAnim = 7;
-				this.setVelX(7);
-		}
-		if(decision == 3){
-				moving = true;
-				movementAnim = 8;
-				this.setVelX(-7);
-		}
-		walkTimer++;
-		
-	}
-
+}
 	public void update() {
 		handler = this.getHandler();
 		map = this.getMap();
@@ -190,7 +156,6 @@ public class NPC2 extends GameObject {
 	            }
 	        }
 	        if(this.isWaiting() == false) {
-	            getMovement();
 	            if(walkTimer == 15) {
 	            	walkTimer = 0;
 	            	this.setWait(true);
@@ -203,7 +168,7 @@ public class NPC2 extends GameObject {
 
 	public void render(Graphics g) {
 		if(this.getHP() > 0) {
-			getSprite(currentFrame,movementAnim);
+			getSprite(movementAnim);
 			g.drawImage(imageTile,(int)this.getX()-25,(int)this.getY()-40,70,70,null);
 			g.setColor(Color.RED);
 			g.drawRect((int)this.getX()-15,(int)this.getY()-25, 60, 55);
@@ -211,8 +176,8 @@ public class NPC2 extends GameObject {
 			if(handler.player.getX() <= this.getX()+this.getWidth()+30 && handler.player.getX() > this.getX()-this.getWidth()-30){
 				
 				if(handler.player.getY() < this.getY()+this.getHeight()+ 30 && handler.player.getY() > this.getY() - this.getHeight() -30) {
-					
-					g.drawImage(TEXT,(int)this.getX(),(int)this.getY()-90,100,100,null);
+				
+					g.drawImage(TEXT,(int)this.getX()-20,(int)this.getY()-130,120,120,null);
 				
 				}
 				
@@ -226,5 +191,3 @@ public class NPC2 extends GameObject {
 		return new Rectangle((int)this.getX()-15,(int)this.getY()-25, 60, 55);
 	}
 }
-
-
