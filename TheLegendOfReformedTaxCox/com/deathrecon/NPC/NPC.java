@@ -28,18 +28,12 @@ public class NPC extends GameObject {
 	File text;
 	public int currentFrame = 0;
 	public int movementAnim = 0;
-	public int POINTS = 0;
-	public String keyColliding = "";
-	public boolean tileTransfer = false;
 	public boolean freeze = false;
 	public boolean firstRun = true;
 	public boolean subtractFlag = false;
 	public boolean subtract = false;
 	public boolean second = false;
 	public boolean moving = false;
-	public boolean falling = false;
-	public boolean sideCollide = false;
-	public boolean collided = false;
 	public boolean played = false;
 	public boolean instance = false;
 	public Player player;
@@ -47,6 +41,7 @@ public class NPC extends GameObject {
 	float lastY = 0;
 	float newX = 500;
 	float newY = 500;
+	int blockedDecision = 4;
 	int decision = 0;
 	int frameTimer = 0;
 	int waitTimer = 0;
@@ -146,6 +141,7 @@ public class NPC extends GameObject {
 				movementAnim = 1;
 				this.setVelX(-7);
 		}
+		this.setBlockedDecision(4);
 		walkTimer++;
 		
 	}
@@ -176,6 +172,9 @@ public class NPC extends GameObject {
 	            if(waitTimer == 50) {
 	            	Random rand = new Random();
 	            	decision = rand.nextInt(3);
+	            	while(decision == this.getBlockedDecision()) {
+	            		decision = rand.nextInt(3);
+	            	}
 	                this.setWait(false);
 	                waitTimer = 0;
 	            }

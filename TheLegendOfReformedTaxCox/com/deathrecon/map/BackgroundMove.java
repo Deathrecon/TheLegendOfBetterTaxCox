@@ -57,7 +57,7 @@ public class BackgroundMove extends GameObject{
 			layer2.setX(this.getX());
 			layer3.setY(this.getY());
 			layer3.setX(this.getX());
-		}else if(handler.Level3){
+		}else if(handler.Level3 || handler.Level1){
 			layer3.setY(this.getY());
 			layer3.setX(this.getX()-8);
 		}
@@ -68,8 +68,16 @@ public class BackgroundMove extends GameObject{
 		getMovement();
 		float newX = (this.getX() + this.getVelX());
 		float newY = (this.getY() + this.getVelY());
-		if(handler.Level2) {
+		if(handler.Level1) {
+			System.out.println("NEW Y: " + newY);
 			if(newY > -2130 && newY < 7) {
+				this.setY(newY);
+			}else {
+				System.out.println("SET TO TRUE");
+				handler.edgeY = true;
+			}
+		}else if(handler.Level2) {
+			if(newY > -2130 && newY < 0) {
 				this.setY(newY);
 			}else {
 				handler.edgeY = true;

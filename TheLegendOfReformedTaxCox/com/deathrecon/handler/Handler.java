@@ -11,6 +11,8 @@ import com.deathrecon.player.Player;
 public class Handler {
 		
 		LinkedList<GameObject> object = new LinkedList<GameObject>();
+		LinkedList<GameObject> entitiesLevel1 = new LinkedList<GameObject>();
+		LinkedList<GameObject> enemiesLevel1 = new LinkedList<GameObject>();
 		LinkedList<GameObject> entitiesLevel2 = new LinkedList<GameObject>();
 		LinkedList<GameObject> enemiesLevel2 = new LinkedList<GameObject>();
 		LinkedList<GameObject> entitiesLevel3 = new LinkedList<GameObject>();
@@ -23,10 +25,12 @@ public class Handler {
 		private boolean	left = false;
 		private boolean	right = false;
 		private boolean space = false;
+		public boolean Level1 = false;
 		public boolean Level2 = true;
 		public boolean Level3 = false;
 		public boolean changedLevel3 = false;
 		public boolean changedLevel2 = false;
+		public boolean changedLevel1 = false;
 		public TileHandler tileHandler;
 		public BackgroundMove map;
 		public Player player;
@@ -79,7 +83,6 @@ public class Handler {
 				temp.update();
 			}
 			if(Level3) {
-				changedLevel2 = false;
 				if(changedLevel3 == false) {
 					map.setImage("Level3.png");
 					map.setHeight(3500);
@@ -92,16 +95,21 @@ public class Handler {
 					map.layer3.loadImage();
 					changedLevel3 = true;
 				}
+				changedLevel2 = false;
+				changedLevel1 = false;
 				for(int i = 0; i < entitiesLevel3.size(); i++) {
 					temp = entitiesLevel3.get(i);
 					temp.update();
 				}
 			}else if(Level2){
-				changedLevel3 = false;
 				if(changedLevel2 == false) {
 					map.setImage("Level2.png");
 					map.setHeight(4000);
-					map.setY(0);
+					if(changedLevel1) {
+						map.setY(-2130);
+					}else {
+						map.setY(0);
+					}
 					//player.setY(player.getY()+2);
 					map.layer3.setImage("MapLayer3.png");
 					map.layer3.setHeight(4000);
@@ -110,11 +118,32 @@ public class Handler {
 					map.loadImage();
 					map.layer3.loadImage();
 					changedLevel2 = true;
-					
 				}
+				changedLevel3 = false;
+				changedLevel1 = false;
 				
 				for(int i = 0; i < entitiesLevel2.size(); i++) {
 					temp = entitiesLevel2.get(i);
+					temp.update();
+				}
+			}else if(Level1) {
+				if(changedLevel1 == false) {
+					map.setImage("Level1.png");
+					map.setHeight(4000);
+					map.setY(0);
+					//player.setY(player.getY()+2);
+					map.layer3.setImage("Layer2Level1.png");
+					map.layer3.setHeight(4000);
+					map.layer3.setY(map.getX());
+					map.setVelY(0);
+					map.loadImage();
+					map.layer3.loadImage();
+					changedLevel1 = true;
+				}
+				changedLevel2 = false;
+				changedLevel3 = false;
+				for(int i = 0; i < entitiesLevel1.size(); i++) {
+					temp = entitiesLevel1.get(i);
 					temp.update();
 				}
 			}
@@ -160,25 +189,31 @@ public class Handler {
 			//We orgranize the layers above the player depending on which layer he is on.//
 			if(tempPlayer.getLayer() == 1) {
 				tempPlayer.render(g);
-				tempLayer1.render(g);
-				tempLayer2.render(g);
-				if(tileHandler.debug) {
-					tempLayer3.render(g);
+				if(Level2) {
+					tempLayer1.render(g);
+					tempLayer2.render(g);
 				}
+				tempLayer3.render(g);
 				tempHearts.render(g);
 				tempHUD.render(g);
 				tempRupee.render(g);
 			}else if(tempPlayer.getLayer() == 2) {
-				tempLayer1.render(g);
+				if(Level2) {
+					tempLayer1.render(g);
+				}
 				tempPlayer.render(g);
-				tempLayer2.render(g);
+				if(Level2) {
+					tempLayer2.render(g);
+				}
 				tempLayer3.render(g);
 				tempHearts.render(g);
 				tempHUD.render(g);
 				tempRupee.render(g);
 			}else if(tempPlayer.getLayer() == 3) {
-				tempLayer1.render(g);
-				tempLayer2.render(g);
+				if(Level2) {
+					tempLayer1.render(g);
+					tempLayer2.render(g);
+				}
 				tempPlayer.render(g);
 				tempLayer3.render(g);
 				tempHearts.render(g);
@@ -206,101 +241,61 @@ public class Handler {
 		
 		//Used to update enemy collisions and do damage if hit.//
 		public void updateEnemies() {
+			LinkedList<GameObject> currentList = new LinkedList<GameObject>();
 			if(Level3) {
-				for(int i = 0; i < enemiesLevel3.size(); i++) {
-					GameObject temp = entitiesLevel3.get(i);
-					temp.update();
-					if(this.isSpace()) {
-						if(player.movementAnim == 0) {
-							if(temp.getBounds().intersects(player.getSlashUpBounds())) {
-								if(temp.getHP() > 0) {
-									if(temp.isHit() == false) {
-										temp.setHP(temp.getHP()-1);
-										temp.setHit(true);
-									}
-								}
-							}
-						}
-						if(player.movementAnim == 3) {
-							if(temp.getBounds().intersects(player.getSlashLeftBounds())) {
-								if(temp.getHP() > 0) {
-									if(temp.isHit() == false) {
-										temp.setHP(temp.getHP()-1);
-										temp.setHit(true);
-									}
-								}
-							}
-						}
-						if(player.movementAnim == 2) {
-							if(temp.getBounds().intersects(player.getSlashDownBounds())) {
-								if(temp.getHP() > 0) {
-									if(temp.isHit() == false) {
-										temp.setHP(temp.getHP()-1);
-										temp.setHit(true);
-									}
-								}
-							}
-						}
-						if(player.movementAnim == 1) {
-							if(temp.getBounds().intersects(player.getSlashRightBounds())) {
-								if(temp.getHP() > 0) {
-									if(temp.isHit() == false) {
-										temp.setHP(temp.getHP()-1);
-										temp.setHit(true);
-									}
+				currentList = enemiesLevel3;
+			}else if(Level2) {
+				currentList = enemiesLevel2;
+			}else if(Level1) {
+				currentList = enemiesLevel1;
+			}
+			for(int i = 0; i < currentList.size(); i++) {
+				GameObject temp = currentList.get(i);
+				temp.update();
+				if(this.isSpace()) {
+					if(player.movementAnim == 0) {
+						if(temp.getBounds().intersects(player.getSlashUpBounds())) {
+							if(temp.getHP() > 0) {
+								if(temp.isHit() == false) {
+									temp.setHP(temp.getHP()-1);
+									temp.setHit(true);
 								}
 							}
 						}
 					}
-				}
-			}else if(Level2) {
-				for(int i = 0; i < enemiesLevel2.size(); i++) {
-					GameObject temp = entitiesLevel2.get(i);
-					temp.update();
-					if(this.isSpace()) {
-						if(player.movementAnim == 0) {
-							if(temp.getBounds().intersects(player.getSlashUpBounds())) {
-								if(temp.getHP() > 0) {
-									if(temp.isHit() == false) {
-										temp.setHP(temp.getHP()-1);
-										temp.setHit(true);
-									}
+					if(player.movementAnim == 3) {
+						if(temp.getBounds().intersects(player.getSlashLeftBounds())) {
+							if(temp.getHP() > 0) {
+								if(temp.isHit() == false) {
+									temp.setHP(temp.getHP()-1);
+									temp.setHit(true);
 								}
 							}
 						}
-						if(player.movementAnim == 3) {
-							if(temp.getBounds().intersects(player.getSlashLeftBounds())) {
-								if(temp.getHP() > 0) {
-									if(temp.isHit() == false) {
-										temp.setHP(temp.getHP()-1);
-										temp.setHit(true);
-									}
+					}
+					if(player.movementAnim == 2) {
+						if(temp.getBounds().intersects(player.getSlashDownBounds())) {
+							if(temp.getHP() > 0) {
+								if(temp.isHit() == false) {
+									temp.setHP(temp.getHP()-1);
+									temp.setHit(true);
 								}
 							}
 						}
-						if(player.movementAnim == 2) {
-							if(temp.getBounds().intersects(player.getSlashDownBounds())) {
-								if(temp.getHP() > 0) {
-									if(temp.isHit() == false) {
-										temp.setHP(temp.getHP()-1);
-										temp.setHit(true);
-									}
-								}
-							}
-						}
-						if(player.movementAnim == 1) {
-							if(temp.getBounds().intersects(player.getSlashRightBounds())) {
-								if(temp.getHP() > 0) {
-									if(temp.isHit() == false) {
-										temp.setHP(temp.getHP()-1);
-										temp.setHit(true);
-									}
+					}
+					if(player.movementAnim == 1) {
+						if(temp.getBounds().intersects(player.getSlashRightBounds())) {
+							if(temp.getHP() > 0) {
+								if(temp.isHit() == false) {
+									temp.setHP(temp.getHP()-1);
+									temp.setHit(true);
 								}
 							}
 						}
 					}
 				}
 			}
+				
 		}
 		//////
 		

@@ -32,9 +32,13 @@ import WorldObjects.World;
 public class TileHandler implements MouseListener{
 		
 	//Level Tile Arrays
+		LinkedList<Tile> level1Tiles = new LinkedList<Tile>();
 		LinkedList<Tile> level2Tiles = new LinkedList<Tile>();
 		LinkedList<Tile> level3Tiles = new LinkedList<Tile>();
 		LinkedList<Tile> currentLevelTiles = new LinkedList<Tile>();
+		LinkedList<GameObject> currentEnemies = new LinkedList<GameObject>();
+		LinkedList<GameObject> currentEntities = new LinkedList<GameObject>();
+		
 		public int mouseCount = 0;
 		public int xMousePos = 0;
 		public int yMousePos = 0;
@@ -68,6 +72,7 @@ public class TileHandler implements MouseListener{
 		File level2EntityFile = new File("Level2EntityMap.txt");
 		File level3MapFile = new File("Level3CollisionMap.txt");
 		File level3EntityFile = new File("Level3EntityMap.txt");
+		
 		public TileHandler(Handler handler,BackgroundMove back) {
 			this.handler = handler;
 			this.back = back;
@@ -82,6 +87,8 @@ public class TileHandler implements MouseListener{
 				currentLevelTiles = level3Tiles;
 			}else if(handler.Level2) {
 				currentLevelTiles = level2Tiles;
+			}else if(handler.Level1) {
+				currentLevelTiles = level1Tiles;
 			}
 			///////
 			for(int i = 0; i < currentLevelTiles.size(); i++)
@@ -326,90 +333,64 @@ public class TileHandler implements MouseListener{
 				//Level check for entity update on collisions//
 				//Not near as much code as we can control enemy movements.//
 				if(handler.Level3) {
-					for(int j = 0; j < handler.enemiesLevel3.size(); j++) {
-						GameObject tempEnemy = handler.enemiesLevel3.get(j);
-						if(tempEnemy.getBounds().intersects(temp.getBounds())) {
-							tempEnemy.setWait(true);
-							if(tempEnemy.getVelX() == 7) {
-								tempEnemy.setVelX(0);
-								tempEnemy.setX(tempEnemy.getX() - 7);
-							}else if(tempEnemy.getVelX() == -7) {
-								tempEnemy.setVelY(0);
-								tempEnemy.setX(tempEnemy.getX() + 7);
-							}
-							if(tempEnemy.getVelY() == 7) {
-								tempEnemy.setVelY(0);
-								tempEnemy.setY(tempEnemy.getY() - 7);
-							}else if(tempEnemy.getVelY() == -7) {
-								tempEnemy.setVelY(0);
-								tempEnemy.setY(tempEnemy.getY() + 7);
-							}
-						}
-					}
-					for( int j = 0; j < handler.entitiesLevel3.size(); j++) {
-						GameObject tempEntites = handler.entitiesLevel3.get(j);
-						if(tempEntites.getBounds().intersects(temp.getBounds())) {
-							tempEntites.setWait(true);
-							if(tempEntites.getVelX() == 7) {
-								tempEntites.setVelX(0);
-								tempEntites.setX(tempEntites.getX() - 7);
-							}else if(tempEntites.getVelX() == -7) {
-								tempEntites.setVelY(0);
-								tempEntites.setX(tempEntites.getX() + 7);
-							}
-							if(tempEntites.getVelY() == 7) {
-								tempEntites.setVelY(0);
-								tempEntites.setY(tempEntites.getY() - 7);
-							}else if(tempEntites.getVelY() == -7) {
-								tempEntites.setVelY(0);
-								tempEntites.setY(tempEntites.getY() + 7);
-							}
-						}
-					}
+					currentEnemies = handler.enemiesLevel3;
+					currentEntities = handler.entitiesLevel3;
 				}else if(handler.Level2) {
-					for(int j = 0; j < handler.enemiesLevel2.size(); j++) {
-						GameObject tempEnemy = handler.enemiesLevel2.get(j);
-						if(tempEnemy.getBounds().intersects(temp.getBounds())) {
-							tempEnemy.setWait(true);
-							if(tempEnemy.getVelX() == 7) {
-								tempEnemy.setVelX(0);
-								tempEnemy.setX(tempEnemy.getX() - 7);
-							}else if(tempEnemy.getVelX() == -7) {
-								tempEnemy.setVelY(0);
-								tempEnemy.setX(tempEnemy.getX() + 7);
-							}
-							if(tempEnemy.getVelY() == 7) {
-								tempEnemy.setVelY(0);
-								tempEnemy.setY(tempEnemy.getY() - 7);
-							}else if(tempEnemy.getVelY() == -7) {
-								tempEnemy.setVelY(0);
-								tempEnemy.setY(tempEnemy.getY() + 7);
-							}
+					currentEnemies = handler.enemiesLevel2;
+					currentEntities = handler.entitiesLevel2;
+				}else if(handler.Level1) {
+					currentEnemies = handler.enemiesLevel1;
+					currentEntities = handler.entitiesLevel1;
+				}
+				for(int j = 0; j < currentEnemies.size(); j++) {
+					GameObject tempEnemy = currentEnemies.get(j);
+					if(tempEnemy.getBounds().intersects(temp.getBounds())) {
+						tempEnemy.setWait(true);
+						if(tempEnemy.getVelX() == 7) {
+							tempEnemy.setBlockedDecision(2);
+							tempEnemy.setVelX(0);
+							tempEnemy.setX(tempEnemy.getX() - 7);
+						}else if(tempEnemy.getVelX() == -7) {
+							tempEnemy.setBlockedDecision(3);
+							tempEnemy.setVelX(0);
+							tempEnemy.setX(tempEnemy.getX() + 7);
+						}
+						if(tempEnemy.getVelY() == 7) {
+							tempEnemy.setBlockedDecision(0);
+							tempEnemy.setVelY(0);
+							tempEnemy.setY(tempEnemy.getY() - 7);
+						}else if(tempEnemy.getVelY() == -7) {
+							tempEnemy.setBlockedDecision(1);
+							tempEnemy.setVelY(0);
+							tempEnemy.setY(tempEnemy.getY() + 7);
 						}
 					}
-					for( int j = 0; j < handler.entitiesLevel2.size(); j++) {
-						GameObject tempEntites = handler.entitiesLevel2.get(j);
-						if(tempEntites.getBounds().intersects(temp.getBounds())) {
-							tempEntites.setWait(true);
-							if(tempEntites.getVelX() == 7) {
-								tempEntites.setVelX(0);
-								tempEntites.setX(tempEntites.getX() - 7);
-							}else if(tempEntites.getVelX() == -7) {
-								tempEntites.setVelY(0);
-								tempEntites.setX(tempEntites.getX() + 7);
-							}
-							if(tempEntites.getVelY() == 7) {
-								tempEntites.setVelY(0);
-								tempEntites.setY(tempEntites.getY() - 7);
-							}else if(tempEntites.getVelY() == -7) {
-								tempEntites.setVelY(0);
-								tempEntites.setY(tempEntites.getY() + 7);
-							}
+				}
+				for( int j = 0; j < currentEntities.size(); j++) {
+					GameObject tempEntity = currentEntities.get(j);
+					if(tempEntity.getBounds().intersects(temp.getBounds())) {
+						tempEntity.setWait(true);
+						if(tempEntity.getVelX() == 7) {
+							tempEntity.setBlockedDecision(2);
+							tempEntity.setVelX(0);
+							tempEntity.setX(tempEntity.getX() - 7);
+						}else if(tempEntity.getVelX() == -7) {
+							tempEntity.setBlockedDecision(3);
+							tempEntity.setVelX(0);
+							tempEntity.setX(tempEntity.getX() + 7);
+						}
+						if(tempEntity.getVelY() == 7) {
+							tempEntity.setBlockedDecision(0);
+							tempEntity.setVelY(0);
+							tempEntity.setY(tempEntity.getY() - 7);
+						}else if(tempEntity.getVelY() == -7) {
+							tempEntity.setBlockedDecision(1);
+							tempEntity.setVelY(0);
+							tempEntity.setY(tempEntity.getY() + 7);
 						}
 					}
 				}
 			}
-			
 		}
 		//Render method in this class is strictly for the debug editor//
 		public void render(Graphics g) {

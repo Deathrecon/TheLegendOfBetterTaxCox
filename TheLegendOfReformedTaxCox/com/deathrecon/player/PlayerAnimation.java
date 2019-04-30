@@ -133,13 +133,11 @@ public class PlayerAnimation{
 		}
 		if(movementAnim == 0) {
 			 if(currentFrame*spriteLocationX < 470) {
-				 System.out.println("X WIDTH: " + currentFrame*spriteLocationX);
 				 imageTile = imageSlash.getSubimage(currentFrame*spriteLocationX, movementAnim*spriteLocationY, 45, 44);
 				 player.imageTile = imageTile;
 			 }
 		}
 		if(movementAnim == 1) {
-			 System.out.println("X WIDTH: " + currentFrame*spriteLocationX);
 			 if(currentFrame*spriteLocationX < 470) {
 				 imageTile = imageSlash.getSubimage(currentFrame*spriteLocationX, movementAnim*spriteLocationY, 45, 43);
 				 player.imageTile = imageTile;
@@ -147,14 +145,12 @@ public class PlayerAnimation{
 		}
 		if(movementAnim == 2) {
 			 if(currentFrame*spriteLocationX < 470) {
-				 System.out.println("X WIDTH: " + currentFrame*spriteLocationX);
 				 imageTile = imageSlash.getSubimage(currentFrame*spriteLocationX, movementAnim*spriteLocationY, 45, 35);
 				 player.imageTile = imageTile;
 			 }
 		}
 		if(movementAnim == 3) {
 			 if(currentFrame*spriteLocationX < 470) {
-				 System.out.println("X WIDTH: " + currentFrame*spriteLocationX);
 				 imageTile = imageSlash.getSubimage(currentFrame*spriteLocationX, movementAnim*spriteLocationY, 45, 48);
 				 player.imageTile = imageTile;
 			 }
@@ -170,6 +166,7 @@ public class PlayerAnimation{
 				currentFrame = 0;
 				slashing = false;
 				handler.map.move = true;
+				handler.refresh();
 			}
 		}
 	}

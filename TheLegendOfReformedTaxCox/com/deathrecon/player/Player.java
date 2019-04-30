@@ -60,7 +60,7 @@ public class Player extends GameObject{
 		}
 		if(handler.edgeY) {
 			if(handler.Level3) {
-				if(this.getLayer() > 2) {
+				if(handler.map.getY() > -1700) {
 					if(newY > 520) {
 						handler.edgeY = false;
 					}
@@ -70,11 +70,22 @@ public class Player extends GameObject{
 					}
 				}
 			}else if(handler.Level2) {
-				if(this.getLayer() > 2) {
+				if(handler.map.getY() > -1700) {
 					if(newY > 520) {
 						handler.edgeY = false;
 					}
 				}else {
+					if(newY < 520) {
+						handler.edgeY = false;
+					}
+				}
+			}else if(handler.Level1) {
+				if(handler.map.getY() > -1700) {
+					if(newY > 520) {
+						handler.edgeY = false;
+					}
+				}else {
+					System.out.println("TRIGGERING");
 					if(newY < 520) {
 						handler.edgeY = false;
 					}
@@ -89,12 +100,22 @@ public class Player extends GameObject{
 				handler.Level2 = false;
 				this.setLayer(2);
 				this.setY(1080);
+			}else if(handler.Level1) {
+				handler.Level1 = false;
+				handler.Level2 = true;
+				this.setLayer(1);
+				this.setY(1080);
 			}
 		}else if(this.getY() > 1080){
-			if(handler.Level3 == true) {
+			if(handler.Level3) {
 				handler.Level3 = false;
 				handler.Level2 = true;
 				this.setLayer(3);
+				this.setY(0);
+			}else if(handler.Level2) {
+				handler.Level2 = false;
+				handler.Level1 = true;
+				this.setLayer(2);
 				this.setY(0);
 			}
 		}

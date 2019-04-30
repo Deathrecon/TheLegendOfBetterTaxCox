@@ -23,6 +23,7 @@ public abstract class GameObject {
 	private int height;
 	private int width;
 	private int HP;
+	private int blockedDecision;
 	private boolean hit;
 	private boolean talkProx;
 	private boolean wait;
@@ -145,6 +146,12 @@ public abstract class GameObject {
 	}
 	public void setTalkProx(boolean talkProx) {
 		this.talkProx = talkProx;
+	}
+	public int getBlockedDecision() {
+		return blockedDecision;
+	}
+	public void setBlockedDecision(int blockedDecision) {
+		this.blockedDecision = blockedDecision;
 	}
 
 }
