@@ -17,6 +17,9 @@ import java.util.Scanner;
 
 import com.deathrecon.Enum.ID;
 import com.deathrecon.Item.Chest;
+import com.deathrecon.NPC.NPC;
+import com.deathrecon.NPC.NPC2;
+import com.deathrecon.NPC.NPC3;
 import com.deathrecon.enemy.Octorok;
 import com.deathrecon.game.GameObject;
 import com.deathrecon.map.BackgroundMove;
@@ -49,6 +52,9 @@ public class TileHandler implements MouseListener{
 		public LayerTile currentTile;
 		public Chest currentChest;
 		public Octorok currentOcto;
+		public NPC currentNPC;
+		public NPC2 currentNPC2;
+		public NPC3 currentNPC3;
 		public Pot currentPot;
 		public boolean level2Loaded = false;
 		public boolean upBlocked = false;
@@ -340,6 +346,26 @@ public class TileHandler implements MouseListener{
 							}
 						}
 					}
+					for( int j = 0; j < handler.entitiesLevel3.size(); j++) {
+						GameObject tempEntites = handler.entitiesLevel3.get(j);
+						if(tempEntites.getBounds().intersects(temp.getBounds())) {
+							tempEntites.setWait(true);
+							if(tempEntites.getVelX() == 7) {
+								tempEntites.setVelX(0);
+								tempEntites.setX(tempEntites.getX() - 7);
+							}else if(tempEntites.getVelX() == -7) {
+								tempEntites.setVelY(0);
+								tempEntites.setX(tempEntites.getX() + 7);
+							}
+							if(tempEntites.getVelY() == 7) {
+								tempEntites.setVelY(0);
+								tempEntites.setY(tempEntites.getY() - 7);
+							}else if(tempEntites.getVelY() == -7) {
+								tempEntites.setVelY(0);
+								tempEntites.setY(tempEntites.getY() + 7);
+							}
+						}
+					}
 				}else if(handler.Level2) {
 					for(int j = 0; j < handler.enemiesLevel2.size(); j++) {
 						GameObject tempEnemy = handler.enemiesLevel2.get(j);
@@ -361,8 +387,29 @@ public class TileHandler implements MouseListener{
 							}
 						}
 					}
+					for( int j = 0; j < handler.entitiesLevel2.size(); j++) {
+						GameObject tempEntites = handler.entitiesLevel2.get(j);
+						if(tempEntites.getBounds().intersects(temp.getBounds())) {
+							tempEntites.setWait(true);
+							if(tempEntites.getVelX() == 7) {
+								tempEntites.setVelX(0);
+								tempEntites.setX(tempEntites.getX() - 7);
+							}else if(tempEntites.getVelX() == -7) {
+								tempEntites.setVelY(0);
+								tempEntites.setX(tempEntites.getX() + 7);
+							}
+							if(tempEntites.getVelY() == 7) {
+								tempEntites.setVelY(0);
+								tempEntites.setY(tempEntites.getY() - 7);
+							}else if(tempEntites.getVelY() == -7) {
+								tempEntites.setVelY(0);
+								tempEntites.setY(tempEntites.getY() + 7);
+							}
+						}
+					}
 				}
 			}
+			
 		}
 		//Render method in this class is strictly for the debug editor//
 		public void render(Graphics g) {
@@ -410,9 +457,15 @@ public class TileHandler implements MouseListener{
 					}else if(id == 2) {
 						g.drawString("Current ID: Pot" , 870,970);
 					}else if(id == 3) {
-						g.drawString("Current ID: Shrub" , 870,970);
+						g.drawString("Current ID: NPC" , 870,970);
 					}else if(id == 4) {
 						g.drawString("Current ID: Octorok" , 870,970);
+					}else if(id == 5) {
+						
+					}else if(id == 6) {
+						g.drawString("Current ID: NPC2" , 870,970);
+					}else if(id == 7) {
+						g.drawString("Current ID: NPC3" , 870,970);
 					}
 				}
 			}
@@ -487,9 +540,15 @@ public class TileHandler implements MouseListener{
 					this.addTile(ID.CollisionTile,x,y, width, height, layer);
 					handler.addObject(new Pot(ID.WorldObjectPot,x,y,width,height,layer,back,handler,this),2);
 				}else if(id == 12) {
-					this.addTile(ID.CollisionTile,x,y, width, height, layer);
+					handler.addObject(new NPC(ID.NPC,x,y,width,height,layer,back,handler,this),2);
 				}else if(id == 13) {
 					handler.addObject(new Octorok(ID.Enemy,x,y,width,height,layer,back,handler,this),2);
+				}else if (id == 14) {
+					
+				}else if(id == 15) {
+					handler.addObject(new NPC2(ID.NPC,x,y,width,height,layer,back,handler,this),2);
+				}else if(id == 16) {
+					handler.addObject(new NPC3(ID.NPC,x,y,width,height,layer,back,handler,this),2);
 				}
 				//Setting level1Loaded to true so the program knows which shared list to add objects to//
 				//(Line 569)//
@@ -547,9 +606,15 @@ public class TileHandler implements MouseListener{
 					this.addTile(ID.CollisionTile,x,y, width, height, layer);
 					handler.addObject(new Pot(ID.WorldObjectPot,x,y,width,height,layer,back,handler,this),3);
 				}else if(id == 12) {
-					this.addTile(ID.CollisionTile,x,y, width, height, layer);
+					handler.addObject(new NPC(ID.NPC,x,y,width,height,layer,back,handler,this),3);
 				}else if(id == 13) {
 					handler.addObject(new Octorok(ID.Enemy,x,y,width,height,layer,back,handler,this),3);
+				}else if(id == 14) {
+					
+				}else if(id == 15) {
+					handler.addObject(new NPC2(ID.NPC,x,y,width,height,layer,back,handler,this),3);
+				}else if(id == 16) {
+					handler.addObject(new NPC3(ID.NPC,x,y,width,height,layer,back,handler,this),3);
 				}
 			}
 		}
@@ -631,6 +696,12 @@ public class TileHandler implements MouseListener{
 					id = 12;
 				}else if(id == 4) {
 					id = 13;
+				}else if (id == 5) {
+					id = 14;
+				}else if(id == 6) {
+					id = 15;
+				}else if(id == 7) {
+					id = 16;
 				}
 				if(id == 10) {
 					System.out.println("CURRENT CHEST X: " + (int)currentChest.getX());
@@ -641,10 +712,19 @@ public class TileHandler implements MouseListener{
 					entityWriter.printf("%d,%d,%d,%d,%d,%d,", id, (int)currentPot.getX(),(int)currentPot.getY(),currentPot.getWidth(),currentPot.getHeight(),currentPot.getLayer());
 					id = 2;
 				}else if(id == 12) {
+					entityWriter.printf("%d,%d,%d,%d,%d,%d,", id, (int)currentNPC.getX(),(int)currentNPC.getY(),currentNPC.getWidth(),currentNPC.getHeight(),currentNPC.getLayer());
 					id = 3;
 				}else if(id == 13) {
 					entityWriter.printf("%d,%d,%d,%d,%d,%d,", id, (int)currentOcto.getX(),(int)currentOcto.getY(),currentOcto.getWidth(),currentOcto.getHeight(),currentOcto.getLayer());
 					id = 4;
+				}else if(id == 14) {
+					
+					id = 5;
+				}else if(id == 15) {
+					entityWriter.printf("%d,%d,%d,%d,%d,%d,", id, (int)currentNPC2.getX(),(int)currentNPC2.getY(),currentNPC2.getWidth(),currentNPC2.getHeight(),currentNPC2.getLayer());
+					id = 6;
+				}else if(id == 16) {
+					entityWriter.printf("%d,%d,%d,%d,%d,%d,", id, (int)currentNPC3.getX(),(int)currentNPC3.getY(),currentNPC3.getWidth(),currentNPC3.getHeight(),currentNPC3.getLayer());
 				}
 			    entityWriter.close();
 			}
@@ -762,7 +842,20 @@ public class TileHandler implements MouseListener{
 						System.out.println("CURRENT CHEST Y: " + (int)currentPot.getY());
 						handler.addObject(tempPot);
 					}else if(id == 3) {
+						currentNPC = new NPC();
+						NPC tempNPC = new NPC(ID.NPC, e.getX() - (int)back.getX(),e.getY() - (int)back.getY(),70,70,layer,back,handler,this);
 						
+						tempNPC.setTileHandler(this);
+						tempNPC.instance = true;
+						currentNPC.setLayer(tempNPC.getLayer());
+						currentNPC.setX(tempNPC.getX());
+						currentNPC.setY(tempNPC.getY());
+						currentNPC.setWidth(70);
+						currentNPC.setHeight(70);
+						currentNPC.player = this.player;
+						tempNPC.player = player;
+						
+						handler.addObject(tempNPC);
 					}else if(id == 4) {
 						currentOcto = new Octorok();
 						Octorok tempOcto = new Octorok(ID.Enemy, e.getX() - (int)back.getX(),e.getY() - (int)back.getY(),70,70,layer,back,handler,this);
@@ -774,6 +867,30 @@ public class TileHandler implements MouseListener{
 						currentOcto.setWidth(70);
 						currentOcto.setHeight(70);
 						handler.addObject(tempOcto);
+					}else if(id == 5) {
+						
+					}else if(id == 6) {
+						currentNPC2 = new NPC2();
+						NPC2 tempNPC2 = new NPC2(ID.NPC, e.getX() - (int)back.getX(),e.getY() - (int)back.getY(),70,70,layer,back,handler,this);
+						tempNPC2.setTileHandler(this);
+						tempNPC2.instance = true;
+						currentNPC2.setLayer(tempNPC2.getLayer());
+						currentNPC2.setX(tempNPC2.getX());
+						currentNPC2.setY(tempNPC2.getY());
+						currentNPC2.setWidth(70);
+						currentNPC2.setHeight(70);
+						handler.addObject(tempNPC2);
+					}else if(id == 7) {
+						currentNPC3 = new NPC3();
+						NPC3 tempNPC3 = new NPC3(ID.NPC, e.getX() - (int)back.getX(),e.getY() - (int)back.getY(),70,70,layer,back,handler,this);
+						tempNPC3.setTileHandler(this);
+						tempNPC3.instance = true;
+						currentNPC3.setLayer(tempNPC3.getLayer());
+						currentNPC3.setX(tempNPC3.getX());
+						currentNPC3.setY(tempNPC3.getY());
+						currentNPC3.setWidth(70);
+						currentNPC3.setHeight(70);
+						handler.addObject(tempNPC3);
 					}
 					entityPlaced = true;
 				}else {

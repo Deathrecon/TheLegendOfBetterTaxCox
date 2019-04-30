@@ -12,7 +12,7 @@ public enum ID {
 	Chest(),
 	Rupee(),
 	HUD(),
-
+	NPC(),
 	WorldObjectPot(),
 
 

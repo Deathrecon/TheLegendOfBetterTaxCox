@@ -24,6 +24,7 @@ public abstract class GameObject {
 	private int width;
 	private int HP;
 	private boolean hit;
+	private boolean talkProx;
 	private boolean wait;
 	private Handler handler;
 	private TileHandler tileHandler;
@@ -138,6 +139,12 @@ public abstract class GameObject {
 	}
 	public void setHit(boolean hit) {
 		this.hit = hit;
+	}
+	public boolean isTalkProx() {
+		return talkProx;
+	}
+	public void setTalkProx(boolean talkProx) {
+		this.talkProx = talkProx;
 	}
 
 }
