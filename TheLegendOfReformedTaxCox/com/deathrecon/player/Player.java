@@ -36,7 +36,7 @@ public class Player extends GameObject{
 		this.setLayer(3);
 		this.setId(ID.Player);
 		this.setX(905);
-		this.setY(520);
+		this.setY(521);
 		this.setHeight(50);
 		this.setWidth(50);
 		player = new PlayerAnimation(this);
@@ -45,6 +45,7 @@ public class Player extends GameObject{
 	@Override
 	public void update() {
 		if(handler.isSpace()) {
+			player.handler = this.handler;
 			player.slashing = true;
 			player.moving = false;
 		}
@@ -183,6 +184,7 @@ public class Player extends GameObject{
 				}
 				handler.updateEnemies();
 			}else {
+				handler.refresh();
 				player.Walk(movementAnim);
 				g.drawImage(imageTile,(int)this.getX()-25,(int)this.getY()-40,100,100,null);
 				g.setColor(Color.RED);

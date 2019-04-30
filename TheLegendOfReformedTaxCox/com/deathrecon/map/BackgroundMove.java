@@ -25,6 +25,8 @@ public class BackgroundMove extends GameObject{
 	public TileHandler tileHandler;
 	public Handler handler;
 	public boolean move = true;
+	public boolean init = true;
+	public boolean first = true;
 	
 	public BackgroundMove() {
 		this.setId(ID.Background);
@@ -34,7 +36,17 @@ public class BackgroundMove extends GameObject{
 		loadImage();
 	}
 	public void loadImage() {
+		System.out.println("RUNNING");
 		this.image = this.getImage();
+		if(first == false) {
+			if(init) {
+				this.setX(-1000);
+				this.setY(-1000);
+				init = false;
+			}
+		}else {
+			first = false;
+		}
 	}
 
 	public void render(Graphics g) {

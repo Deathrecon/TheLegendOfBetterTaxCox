@@ -206,31 +206,43 @@ public class Handler {
 					GameObject temp = entitiesLevel3.get(i);
 					temp.update();
 					if(this.isSpace()) {
-						if(this.isUp()) {
+						if(player.movementAnim == 0) {
 							if(temp.getBounds().intersects(player.getSlashUpBounds())) {
 								if(temp.getHP() > 0) {
-									temp.setHP(temp.getHP()-1);
+									if(temp.isHit() == false) {
+										temp.setHP(temp.getHP()-1);
+										temp.setHit(true);
+									}
 								}
 							}
 						}
-						if(this.isLeft()) {
+						if(player.movementAnim == 3) {
 							if(temp.getBounds().intersects(player.getSlashLeftBounds())) {
 								if(temp.getHP() > 0) {
-									temp.setHP(temp.getHP()-1);
+									if(temp.isHit() == false) {
+										temp.setHP(temp.getHP()-1);
+										temp.setHit(true);
+									}
 								}
 							}
 						}
-						if(this.isDown()) {
+						if(player.movementAnim == 2) {
 							if(temp.getBounds().intersects(player.getSlashDownBounds())) {
 								if(temp.getHP() > 0) {
-									temp.setHP(temp.getHP()-1);
+									if(temp.isHit() == false) {
+										temp.setHP(temp.getHP()-1);
+										temp.setHit(true);
+									}
 								}
 							}
 						}
-						if(this.isRight()) {
+						if(player.movementAnim == 1) {
 							if(temp.getBounds().intersects(player.getSlashRightBounds())) {
 								if(temp.getHP() > 0) {
-									temp.setHP(temp.getHP()-1);
+									if(temp.isHit() == false) {
+										temp.setHP(temp.getHP()-1);
+										temp.setHit(true);
+									}
 								}
 							}
 						}
@@ -241,31 +253,43 @@ public class Handler {
 					GameObject temp = entitiesLevel2.get(i);
 					temp.update();
 					if(this.isSpace()) {
-						if(this.isUp()) {
+						if(player.movementAnim == 0) {
 							if(temp.getBounds().intersects(player.getSlashUpBounds())) {
 								if(temp.getHP() > 0) {
-									temp.setHP(temp.getHP()-1);
+									if(temp.isHit() == false) {
+										temp.setHP(temp.getHP()-1);
+										temp.setHit(true);
+									}
 								}
 							}
 						}
-						if(this.isLeft()) {
+						if(player.movementAnim == 3) {
 							if(temp.getBounds().intersects(player.getSlashLeftBounds())) {
 								if(temp.getHP() > 0) {
-									temp.setHP(temp.getHP()-1);
+									if(temp.isHit() == false) {
+										temp.setHP(temp.getHP()-1);
+										temp.setHit(true);
+									}
 								}
 							}
 						}
-						if(this.isDown()) {
+						if(player.movementAnim == 2) {
 							if(temp.getBounds().intersects(player.getSlashDownBounds())) {
 								if(temp.getHP() > 0) {
-									temp.setHP(temp.getHP()-1);
+									if(temp.isHit() == false) {
+										temp.setHP(temp.getHP()-1);
+										temp.setHit(true);
+									}
 								}
 							}
 						}
-						if(this.isRight()) {
+						if(player.movementAnim == 1) {
 							if(temp.getBounds().intersects(player.getSlashRightBounds())) {
 								if(temp.getHP() > 0) {
-									temp.setHP(temp.getHP()-1);
+									if(temp.isHit() == false) {
+										temp.setHP(temp.getHP()-1);
+										temp.setHit(true);
+									}
 								}
 							}
 						}
@@ -274,6 +298,18 @@ public class Handler {
 			}
 		}
 		//////
+		
+		public void refresh() {
+			for(int i = 0; i < enemiesLevel2.size(); i++) {
+				GameObject temp = entitiesLevel2.get(i);
+				temp.setHit(false);
+			}
+			for(int i = 0; i < enemiesLevel3.size(); i++) {
+				GameObject temp = entitiesLevel3.get(i);
+				temp.setHit(false);
+			}
+		}
+		
 		public void addObject(GameObject temp) {
 			object.add(temp);
 		}

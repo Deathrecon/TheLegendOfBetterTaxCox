@@ -32,7 +32,6 @@ public class TileHandler implements MouseListener{
 		LinkedList<Tile> level2Tiles = new LinkedList<Tile>();
 		LinkedList<Tile> level3Tiles = new LinkedList<Tile>();
 		LinkedList<Tile> currentLevelTiles = new LinkedList<Tile>();
-		
 		public int mouseCount = 0;
 		public int xMousePos = 0;
 		public int yMousePos = 0;
@@ -63,7 +62,6 @@ public class TileHandler implements MouseListener{
 		File level2EntityFile = new File("Level2EntityMap.txt");
 		File level3MapFile = new File("Level3CollisionMap.txt");
 		File level3EntityFile = new File("Level3EntityMap.txt");
-		
 		public TileHandler(Handler handler,BackgroundMove back) {
 			this.handler = handler;
 			this.back = back;

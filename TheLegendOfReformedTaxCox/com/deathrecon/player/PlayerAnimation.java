@@ -103,7 +103,34 @@ public class PlayerAnimation{
 	public void Slash(int movementAnim) {
 		int spriteLocationX = 47;
 		int spriteLocationY = 45;
-		
+		if(handler.isUp()) {
+			if(handler.edgeY) {
+				player.setY(player.getY()+7);
+			}else {
+				handler.map.move = false;
+			}
+		}
+		if(handler.isDown()) {
+			if(handler.edgeY) {
+				player.setY(player.getY()-7);
+			}else {
+				handler.map.move = false;
+			}
+		}
+		if(handler.isLeft()) {
+			if(handler.edgeX) {
+				player.setX(player.getX()+7);
+			}else {
+				handler.map.move = false;
+			}
+		}
+		if(handler.isRight()) {
+			if(handler.edgeX) {
+				player.setX(player.getX()-7);
+			}else {
+				handler.map.move = false;
+			}
+		}
 		if(movementAnim == 0) {
 			 if(currentFrame*spriteLocationX < 470) {
 				 System.out.println("X WIDTH: " + currentFrame*spriteLocationX);
@@ -142,6 +169,7 @@ public class PlayerAnimation{
 			}else {
 				currentFrame = 0;
 				slashing = false;
+				handler.map.move = true;
 			}
 		}
 	}
