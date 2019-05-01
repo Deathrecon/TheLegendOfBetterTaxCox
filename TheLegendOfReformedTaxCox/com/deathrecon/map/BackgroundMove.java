@@ -32,11 +32,10 @@ public class BackgroundMove extends GameObject{
 		this.setId(ID.Background);
 		this.setWidth(4000);
 		this.setHeight(4000);
-		this.setImage("Level2.png");
+		this.setImage("linkHouse.png");
 		loadImage();
 	}
 	public void loadImage() {
-		System.out.println("RUNNING");
 		this.image = this.getImage();
 		if(first == false) {
 			if(init) {
@@ -69,11 +68,9 @@ public class BackgroundMove extends GameObject{
 		float newX = (this.getX() + this.getVelX());
 		float newY = (this.getY() + this.getVelY());
 		if(handler.Level1) {
-			System.out.println("NEW Y: " + newY);
-			if(newY > -2130 && newY < 7) {
+			if(newY > -2130 && newY < 0) {
 				this.setY(newY);
 			}else {
-				System.out.println("SET TO TRUE");
 				handler.edgeY = true;
 			}
 		}else if(handler.Level2) {

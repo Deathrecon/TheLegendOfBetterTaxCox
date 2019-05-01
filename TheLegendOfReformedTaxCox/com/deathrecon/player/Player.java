@@ -53,43 +53,48 @@ public class Player extends GameObject{
 		this.setHP(HP);
 		float newX = (this.getX() + this.getVelX());
 		float newY = (this.getY() + this.getVelY());
-		if(handler.edgeX) {
-			if(newX == 905) {
-				handler.edgeX = false;
-			}
-		}
-		if(handler.edgeY) {
-			if(handler.Level3) {
-				if(handler.map.getY() > -1700) {
-					if(newY > 520) {
-						handler.edgeY = false;
-					}
-				}else {
-					if(newY < 520) {
-						handler.edgeY = false;
-					}
-				}
-			}else if(handler.Level2) {
-				if(handler.map.getY() > -1700) {
-					if(newY > 520) {
-						handler.edgeY = false;
-					}
-				}else {
-					if(newY < 520) {
-						handler.edgeY = false;
-					}
-				}
-			}else if(handler.Level1) {
-				if(handler.map.getY() > -1700) {
-					if(newY > 520) {
-						handler.edgeY = false;
-					}
-				}else {
-					if(newY < 520) {
-						handler.edgeY = false;
-					}
+		if(handler.linkHouse == false) {
+			if(handler.edgeX) {
+				if(newX == 905) {
+					handler.edgeX = false;
 				}
 			}
+			if(handler.edgeY) {
+				if(handler.Level3) {
+					if(handler.map.getY() > -1700) {
+						if(newY > 520) {
+							handler.edgeY = false;
+						}
+					}else {
+						if(newY < 520) {
+							handler.edgeY = false;
+						}
+					}
+				}else if(handler.Level2) {
+					if(handler.map.getY() > -1700) {
+						if(newY > 520) {
+							handler.edgeY = false;
+						}
+					}else {
+						if(newY < 520) {
+							handler.edgeY = false;
+						}
+					}
+				}else if(handler.Level1) {
+					if(handler.map.getY() > -1700) {
+						if(newY > 520) {
+							handler.edgeY = false;
+						}
+					}else {
+						if(newY < 520) {
+							handler.edgeY = false;
+						}
+					}
+				}
+			}
+		}else {
+			handler.edgeY = true;
+			handler.edgeX = true;
 		}
 		this.setY(newY);
 		this.setX(newX);

@@ -30,7 +30,6 @@ public enum ID {
 	CollisionTile,
 	WaterTile,
 	DamageTile,
-	JumpTile,
 	EventTile,
 	EventChestTile,
 	EnemySpawnTile;

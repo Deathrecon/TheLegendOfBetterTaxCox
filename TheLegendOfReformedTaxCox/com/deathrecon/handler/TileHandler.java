@@ -35,16 +35,17 @@ public class TileHandler implements MouseListener{
 		LinkedList<Tile> level1Tiles = new LinkedList<Tile>();
 		LinkedList<Tile> level2Tiles = new LinkedList<Tile>();
 		LinkedList<Tile> level3Tiles = new LinkedList<Tile>();
+		LinkedList<Tile> linkHouseTiles = new LinkedList<Tile>();
 		LinkedList<Tile> currentLevelTiles = new LinkedList<Tile>();
 		LinkedList<GameObject> currentEnemies = new LinkedList<GameObject>();
 		LinkedList<GameObject> currentEntities = new LinkedList<GameObject>();
-		
 		public int mouseCount = 0;
 		public int xMousePos = 0;
 		public int yMousePos = 0;
 		public int layer = 1;
-		public int numLevels = 3;
+		public int numLevels = 4;
 		public int id = 4;
+		public int switchTimer = 0;
 		public boolean rectanglePlaced = false;
 		public boolean entityPlaced = false;
 		public boolean mousePressed = false;
@@ -63,6 +64,8 @@ public class TileHandler implements MouseListener{
 		public Pot currentPot;
 		public boolean level1Loaded = false;
 		public boolean level2Loaded = false;
+		public boolean level3Loaded = false;
+		public boolean linkHouseLoaded = false;
 		public boolean upBlocked = false;
 		public boolean downBlocked = false;
 		public boolean leftBlocked = false;
@@ -70,6 +73,8 @@ public class TileHandler implements MouseListener{
 		public boolean edgeX = false;
 		public boolean edgeY = false;
 		public World w;
+		File linkMapFile = new File("LinkHouseCollisionMap.txt");
+		File linkEntityFile = new File("LinkHouseEntityMap.txt");
 		File level1MapFile = new File("Level1CollisionMap.txt");
 		File level1EntityFile = new File("Level1EntityMap.txt");
 		File level2MapFile = new File("Level2CollisionMap.txt");
@@ -93,6 +98,10 @@ public class TileHandler implements MouseListener{
 				currentLevelTiles = level2Tiles;
 			}else if(handler.Level1) {
 				currentLevelTiles = level1Tiles;
+				//System.out.println("updated");
+			}else if(handler.linkHouse) {
+				handler.map.setY(-1350);
+				currentLevelTiles = linkHouseTiles;
 			}
 			///////
 			for(int i = 0; i < currentLevelTiles.size(); i++)
@@ -215,7 +224,19 @@ public class TileHandler implements MouseListener{
 									}
 								}
 							}
-						}	
+						}else if(temp.getId() == ID.EventTile) {
+							if(handler.linkHouse) {
+								handler.linkHouse = false;
+								handler.Level1 = true;
+
+							}else if(handler.Level1) {
+								handler.linkHouse = true;
+								handler.Level1 = false;
+	
+							}else {
+								System.out.println("TEMP ID: " + temp.getId());
+							}
+						}
 						//Test for layer switch. (All layer switches are on layer 0)//
 					}else if(temp.getLayer() == 0){
 						//Check layerswitch ID and adjusts player layer accordingly.//
@@ -430,7 +451,7 @@ public class TileHandler implements MouseListener{
 					}else if(id == 5) {
 						g.drawString("Current ID: WaterTile" , 790,970);
 					}else if(id == 6) {
-						g.drawString("Current ID: JumpTile" , 790,970);
+						g.drawString("Current ID: EventTile" , 790,970);
 					}
 				}else if(entityMode){
 					g.drawString("Save Entity", 1305, 990);
@@ -459,16 +480,22 @@ public class TileHandler implements MouseListener{
 		
 		//Initialization of tile files//
 		public void initTiles() {
-			File currentCollisionMap = level1MapFile;
-			File currentEntityMap = level1EntityFile;
+			File currentCollisionMap = null;
+			File currentEntityMap = null;
 			int count = 0;
 			while(count < numLevels) {
-				if(count == 1) {
+				if(count == 0) {
+					currentCollisionMap = level1MapFile;
+					currentEntityMap = level1EntityFile;
+				}else if(count == 1) {
 					currentCollisionMap = level2MapFile;
 					currentEntityMap = level2EntityFile;
 				}else if(count == 2) {
 					currentCollisionMap = level3MapFile;
 					currentEntityMap = level3EntityFile;
+				}else if(count == 3) {
+					currentCollisionMap = linkMapFile;
+					currentEntityMap = linkEntityFile;
 				}
 				int id = 0;
 				int x = 0;
@@ -513,7 +540,7 @@ public class TileHandler implements MouseListener{
 					}else if(id == 5) {
 						this.addTile(ID.WaterTile,x,y, width, height, layer);
 					}else if(id == 6) {
-						this.addTile(ID.JumpTile,x,y, width, height, layer);
+						this.addTile(ID.EventTile,x,y, width, height, layer);
 					}
 					////
 				}
@@ -555,8 +582,11 @@ public class TileHandler implements MouseListener{
 				}else if(count == 1) {
 					level2Loaded = true;
 					System.out.println("LEVEL2");
-				}else {
+				}else if(count == 2){
+					level3Loaded = true;
 					System.out.println("LEVEL3");
+				}else if(count == 3) {
+					linkHouseLoaded = true;
 				}
 				count++;
 			}
@@ -578,8 +608,20 @@ public class TileHandler implements MouseListener{
 				level1Tiles.add(temp);
 			}else if(level2Loaded == false) {
 				level2Tiles.add(temp);
-			}else {
+			}else if(level3Loaded == false){
 				level3Tiles.add(temp);
+			}else if(linkHouseLoaded == false){
+				linkHouseTiles.add(temp);
+			}else {
+				if(handler.Level1) {
+					level1Tiles.add(temp);
+				}else if(handler.Level2) {
+					level2Tiles.add(temp);
+				}else if(handler.Level3) {
+					level3Tiles.add(temp);
+				}else if(handler.linkHouse) {
+					linkHouseTiles.add(temp);
+				}
 			}
 			////
 		}
@@ -594,14 +636,17 @@ public class TileHandler implements MouseListener{
 			//Determining which level player is on and setting printwriters appropriately.//
 			try {
 			if(handler.Level1) {
-					mapWriter = new PrintWriter(new FileWriter(level1MapFile,true));
-					entityWriter = new PrintWriter(new FileWriter(level1EntityFile,true));
+				mapWriter = new PrintWriter(new FileWriter(level1MapFile,true));
+				entityWriter = new PrintWriter(new FileWriter(level1EntityFile,true));
 			}else if(handler.Level2) {
-					mapWriter = new PrintWriter(new FileWriter(level2MapFile,true));
-					entityWriter = new PrintWriter(new FileWriter(level2EntityFile,true));
+				mapWriter = new PrintWriter(new FileWriter(level2MapFile,true));
+				entityWriter = new PrintWriter(new FileWriter(level2EntityFile,true));
 			}else if(handler.Level3) {
-					mapWriter = new PrintWriter(new FileWriter(level3MapFile,true));
-					entityWriter = new PrintWriter(new FileWriter(level3EntityFile,true));
+				mapWriter = new PrintWriter(new FileWriter(level3MapFile,true));
+				entityWriter = new PrintWriter(new FileWriter(level3EntityFile,true));
+			}else if(handler.linkHouse) {
+				mapWriter = new PrintWriter(new FileWriter(linkMapFile,true));
+				entityWriter = new PrintWriter(new FileWriter(linkEntityFile,true));
 			}
 			}catch(IOException e) {
 				e.printStackTrace();
@@ -723,12 +768,13 @@ public class TileHandler implements MouseListener{
 						}else if(id == 4) {
 							this.addTile(ID.CollisionTile, xMousePos - (int)back.getX(), yMousePos - (int)back.getY(),width,height, layer);
 							currentTile.setId(ID.CollisionTile);
+							System.out.println("ADDED TILE");
 						}else if(id == 5) {
 							this.addTile(ID.WaterTile, xMousePos - (int)back.getX(), yMousePos - (int)back.getY(),width,height, layer);
 							currentTile.setId(ID.WaterTile);
 						}else if(id == 6) {
-							this.addTile(ID.JumpTile, xMousePos - (int)back.getX(), yMousePos - (int)back.getY(),width,height, layer);
-							currentTile.setId(ID.JumpTile);
+							this.addTile(ID.EventTile, xMousePos - (int)back.getX(), yMousePos - (int)back.getY(),width,height, layer);
+							currentTile.setId(ID.EventTile);
 						}
 						currentTile.setLayer(layer);
 						currentTile.setX(xMousePos - (int)back.getX());

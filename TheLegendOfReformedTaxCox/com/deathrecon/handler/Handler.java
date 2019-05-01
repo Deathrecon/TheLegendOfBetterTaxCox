@@ -12,6 +12,7 @@ import com.deathrecon.player.Player;
 public class Handler {
 		
 		LinkedList<GameObject> object = new LinkedList<GameObject>();
+		LinkedList<GameObject> entitiesLinkHouse = new LinkedList<GameObject>();
 		LinkedList<GameObject> entitiesLevel1 = new LinkedList<GameObject>();
 		LinkedList<GameObject> enemiesLevel1 = new LinkedList<GameObject>();
 		LinkedList<GameObject> entitiesLevel2 = new LinkedList<GameObject>();
@@ -26,12 +27,14 @@ public class Handler {
 		private boolean	left = false;
 		private boolean	right = false;
 		private boolean space = false;
+		public boolean linkHouse = true;
 		public boolean Level1 = false;
-		public boolean Level2 = true;
+		public boolean Level2 = false;
 		public boolean Level3 = false;
 		public boolean changedLevel3 = false;
 		public boolean changedLevel2 = false;
 		public boolean changedLevel1 = false;
+		public boolean changedLinkHouse = false;
 		public TileHandler tileHandler;
 		public BackgroundMove map;
 		public Player player;
@@ -130,7 +133,7 @@ public class Handler {
 				}
 				changedLevel3 = false;
 				changedLevel1 = false;
-				
+				changedLinkHouse = false;
 				for(int i = 0; i < entitiesLevel2.size(); i++) {
 					temp = entitiesLevel2.get(i);
 					if(temp.getId() == ID.Rupee) {
@@ -146,7 +149,13 @@ public class Handler {
 				if(changedLevel1 == false) {
 					map.setImage("Level1.png");
 					map.setHeight(4000);
-					map.setY(0);
+					map.setWidth(4000);
+					if(changedLinkHouse) {
+						map.setY(-1360);
+						map.setX(-1670);
+					}else {
+						map.setY(0);
+					}
 					//player.setY(player.getY()+2);
 					map.layer3.setImage("Layer2Level1.png");
 					map.layer3.setHeight(4000);
@@ -158,8 +167,37 @@ public class Handler {
 				}
 				changedLevel2 = false;
 				changedLevel3 = false;
+				changedLinkHouse = false;
 				for(int i = 0; i < entitiesLevel1.size(); i++) {
 					temp = entitiesLevel1.get(i);
+					if(temp.getId() == ID.Rupee) {
+						if(player.getBounds().intersects(temp.getBounds())) {
+							System.out.println("HELLO?");
+							temp.setX(-10000000);
+							player.RupCount += 10;
+						}
+					}
+					temp.update();
+				}
+			}else if(linkHouse) {
+				if(changedLinkHouse == false) {
+					player.setLayer(2);
+					player.setY(player.getY()-50);
+					map.setImage("linkHouse.png");
+					map.setHeight(3500);
+					map.setWidth(6500);
+					map.setY(-1400);
+					map.setX(-2290);
+					map.setVelY(0);
+					map.loadImage();
+					map.layer3.loadImage();
+					changedLinkHouse = true;
+				}
+				changedLevel1 = false;
+				changedLevel2 = false;
+				changedLevel3 = false;
+				for(int i = 0; i < entitiesLinkHouse.size(); i++) {
+					temp = entitiesLinkHouse.get(i);
 					if(temp.getId() == ID.Rupee) {
 						if(player.getBounds().intersects(temp.getBounds())) {
 							System.out.println("HELLO?");
@@ -207,6 +245,16 @@ public class Handler {
 					temp = entitiesLevel2.get(i);
 					temp.render(g);
 				}
+			}else if(Level1) {
+				for(int i = 0; i < entitiesLevel1.size();i++) {
+					temp = entitiesLevel1.get(i);
+					temp.render(g);
+				}
+			}else if(linkHouse) {
+				for(int i = 0; i < entitiesLinkHouse.size();i++) {
+					temp = entitiesLinkHouse.get(i);
+					temp.render(g);
+				}
 			}
 			//We orgranize the layers above the player depending on which layer he is on.//
 			if(tempPlayer.getLayer() == 1) {
@@ -215,7 +263,9 @@ public class Handler {
 					tempLayer1.render(g);
 					tempLayer2.render(g);
 				}
-				tempLayer3.render(g);
+				if(Level2 || Level3) {
+					tempLayer3.render(g);
+				}
 				tempHearts.render(g);
 				tempHUD.render(g);
 				tempRupee.render(g);
@@ -227,7 +277,9 @@ public class Handler {
 				if(Level2) {
 					tempLayer2.render(g);
 				}
-				tempLayer3.render(g);
+				if(Level2 || Level3){
+					tempLayer3.render(g);
+				}
 				tempHearts.render(g);
 				tempHUD.render(g);
 				tempRupee.render(g);
@@ -237,7 +289,9 @@ public class Handler {
 					tempLayer2.render(g);
 				}
 				tempPlayer.render(g);
-				tempLayer3.render(g);
+				if(Level2 || Level3) {
+					tempLayer3.render(g);
+				}
 				tempHearts.render(g);
 				tempHUD.render(g);
 				tempRupee.render(g);
@@ -254,6 +308,16 @@ public class Handler {
 			}else if(Level2) {
 				for(int i = 0; i < entitiesLevel2.size(); i++){
 					GameObject temp = entitiesLevel2.get(i);
+					temp.update();
+				}
+			}else if(Level1) {
+				for(int i = 0; i < entitiesLevel1.size();i++) {
+					GameObject temp = entitiesLevel1.get(i);
+					temp.update();
+				}
+			}else if(linkHouse) {
+				for(int i = 0; i < entitiesLinkHouse.size();i++) {
+					GameObject temp = entitiesLinkHouse.get(i);
 					temp.update();
 				}
 			}
@@ -368,6 +432,11 @@ public class Handler {
 						temp.setMap(map);
 						enemiesLevel3.add(temp);
 					}
+				}
+			}else if(level == 3) {
+				if(temp.getId() == ID.Chest || temp.getId() == ID.Rupee || temp.getId() == ID.WorldObjectPot) {
+					entitiesLinkHouse.add(temp);
+					temp.setLevel(level);
 				}
 			}
 		}
