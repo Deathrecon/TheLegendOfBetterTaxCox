@@ -22,7 +22,7 @@ public class Handler {
 		LinkedList<GameObject> enemiesLevel2 = new LinkedList<GameObject>();
 		LinkedList<GameObject> entitiesLevel3 = new LinkedList<GameObject>();
 		LinkedList<GameObject> enemiesLevel3 = new LinkedList<GameObject>();
-		
+		public int timer = 0;
 		public boolean edgeX = false;
 		public boolean edgeY = false;
 		private boolean up = false;
@@ -98,6 +98,13 @@ public class Handler {
 		}
 
 		public void update() {
+			if(player.isHit()) {
+				if(timer == 30) {
+					player.setHit(false);
+				}else {
+					timer++;
+				}
+			}
 			GameObject temp;
 			for(int i = 0; i < object.size(); i++)
 			{
@@ -133,6 +140,14 @@ public class Handler {
 							audio.playSound(rupee);
 							player.RupCount += 10;
 							
+						}
+					}
+					if(temp.getId() == ID.Enemy) {
+						if(temp.getBounds().intersects(player.getBounds())) {
+							if(player.isHit() == false) {
+								player.HP--;
+								player.setHit(true);
+							}
 						}
 					}
 					temp.update();
@@ -171,6 +186,14 @@ public class Handler {
 							temp.setX(-10000000);
 							player.RupCount += 10;
 							audio.playSound(rupee);
+						}
+					}
+					if(temp.getId() == ID.Enemy) {
+						if(temp.getBounds().intersects(player.getBounds())) {
+							if(player.isHit() == false) {
+								player.HP--;
+								player.setHit(true);
+							}
 						}
 					}
 					temp.update();
@@ -214,6 +237,14 @@ public class Handler {
 							audio.playSound(rupee);
 						}
 					}
+					if(temp.getId() == ID.Enemy) {
+						if(temp.getBounds().intersects(player.getBounds())) {
+							if(player.isHit() == false) {
+								player.HP--;
+								player.setHit(true);
+							}
+						}
+					}
 					temp.update();
 				}
 			}else if(linkHouse) {
@@ -242,6 +273,14 @@ public class Handler {
 							player.RupCount += 10;
 							System.out.println("sound??");
 							audio.playSound(rupee);
+						}
+					}
+					if(temp.getId() == ID.Enemy) {
+						if(temp.getBounds().intersects(player.getBounds())) {
+							if(player.isHit() == false) {
+								player.HP--;
+								player.setHit(true);
+							}
 						}
 					}
 					temp.update();

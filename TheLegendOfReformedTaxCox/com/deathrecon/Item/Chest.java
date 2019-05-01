@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.deathrecon.Enum.ID;
+import com.deathrecon.audio.AudioPlayer;
 import com.deathrecon.game.GameObject;
 import com.deathrecon.handler.Handler;
 import com.deathrecon.handler.TileHandler;
@@ -25,8 +26,10 @@ public class Chest extends GameObject{
 	private BufferedImage imageTile;
 	public BackgroundMove map;
 	//private int[][] tileArray = new int[11][7];
+	AudioPlayer audio = new AudioPlayer();
 	File Chest = new File("testChest.png");
 	File Empty = new File("testEmpty.png"); 
+	File gotSound = new File("MC_Fanfare_Item.wav");
 	public int currentFrame = 0;
 	public int movementAnim = 0;
 	public int POINTS = 0;
@@ -151,6 +154,7 @@ public class Chest extends GameObject{
 			if(handler.player.getY() < this.getY()+this.getHeight()+ 30 && handler.player.getY() > this.getY() - this.getHeight() -60) {
 				
 				if(handler.isSpace()) {
+					audio.playSound(gotSound);
 					handler.player.player.slashing = false;
 					open = true;
 					handler.player.hasSword = true;

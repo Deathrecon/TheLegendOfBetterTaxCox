@@ -54,7 +54,7 @@ public class TileHandler implements MouseListener{
 		public boolean rectanglePlaced = false;
 		public boolean entityPlaced = false;
 		public boolean mousePressed = false;
-		public boolean debug = true;
+		public boolean debug = false;
 		public boolean entityMode = false;
 		public boolean tileMode = true;
 		public BackgroundMove back;
