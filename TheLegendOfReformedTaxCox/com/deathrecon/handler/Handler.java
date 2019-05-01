@@ -2,9 +2,12 @@ package com.deathrecon.handler;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.io.File;
 import java.util.LinkedList;
 
 import com.deathrecon.Enum.ID;
+import com.deathrecon.audio.AudioPlayer;
+import com.deathrecon.audio.AudioThemePlayer;
 import com.deathrecon.enemy.Octorok;
 import com.deathrecon.game.GameObject;
 import com.deathrecon.map.BackgroundMove;
@@ -39,6 +42,20 @@ public class Handler {
 		public BackgroundMove map;
 		public Player player;
 		public GameObject testEnemy;
+		File townTheme = new File("24 Hyrule Town.wav");
+		File Field = new File("11 Hyrule Field.wav");
+		File house = new File("17 Inside the House.wav");
+		public AudioThemePlayer Fieldtheme = new AudioThemePlayer(Field);;
+		public AudioThemePlayer Towntheme = new AudioThemePlayer(townTheme);;
+		public AudioThemePlayer Housetheme = new AudioThemePlayer(house);
+		public AudioPlayer hitSound = new AudioPlayer();
+		File hit = new File("MC_Enemy_Hit.wav");
+		File kill = new File("MC_Enemy_Kill.wav");
+		public boolean Townplay = false;
+		public boolean Fieldplay = false;
+		public boolean House = false;
+		File rupee = new File("MC_Rupee.wav");
+		public AudioPlayer audio = new AudioPlayer();
 		GameObject tempPlayer;
 		GameObject tempLayer1;
 		GameObject tempLayer2;
@@ -88,6 +105,8 @@ public class Handler {
 				temp.update();
 			}
 			if(Level3) {
+				Fieldplay = true;
+				Towntheme.stopSound();
 				if(changedLevel3 == false) {
 					map.setImage("Level3.png");
 					map.setHeight(3500);
@@ -99,6 +118,9 @@ public class Handler {
 					map.loadImage();
 					map.layer3.loadImage();
 					changedLevel3 = true;
+					if(Fieldplay) {
+						Fieldtheme.loopSound();
+					}
 				}
 				changedLevel2 = false;
 				changedLevel1 = false;
@@ -107,12 +129,18 @@ public class Handler {
 					if(temp.getId() == ID.Rupee) {
 						if(player.getBounds().intersects(temp.getBounds())) {
 							temp.setX(-10000000);
+							System.out.println("sound??");
+							audio.playSound(rupee);
 							player.RupCount += 10;
+							
 						}
 					}
 					temp.update();
 				}
 			}else if(Level2){
+				Townplay = true;
+				Fieldtheme.stopSound();
+				Housetheme.stopSound();
 				if(changedLevel2 == false) {
 					map.setImage("Level2.png");
 					map.setHeight(4000);
@@ -129,6 +157,9 @@ public class Handler {
 					map.loadImage();
 					map.layer3.loadImage();
 					changedLevel2 = true;
+					if(Townplay) {
+						Towntheme.loopSound();
+					}
 				}
 				changedLevel3 = false;
 				changedLevel1 = false;
@@ -139,11 +170,16 @@ public class Handler {
 						if(player.getBounds().intersects(temp.getBounds())) {
 							temp.setX(-10000000);
 							player.RupCount += 10;
+							audio.playSound(rupee);
 						}
 					}
 					temp.update();
+					
+					
 				}
 			}else if(Level1) {
+				Towntheme.stopSound();
+				Housetheme.stopSound();
 				if(changedLevel1 == false) {
 					map.setImage("Level1.png");
 					map.setHeight(4000);
@@ -174,12 +210,15 @@ public class Handler {
 						if(player.getBounds().intersects(temp.getBounds())) {
 							temp.setX(-10000000);
 							player.RupCount += 10;
+							System.out.println("sound??");
+							audio.playSound(rupee);
 						}
 					}
 					temp.update();
 				}
 			}else if(linkHouse) {
 				if(changedLinkHouse == false) {
+					Housetheme.loopSound();
 					player.setLayer(2);
 					player.setY(player.getY()-50);
 					map.setImage("linkHouse.png");
@@ -201,6 +240,8 @@ public class Handler {
 						if(player.getBounds().intersects(temp.getBounds())) {
 							temp.setX(-10000000);
 							player.RupCount += 10;
+							System.out.println("sound??");
+							audio.playSound(rupee);
 						}
 					}
 					temp.update();
@@ -340,9 +381,11 @@ public class Handler {
 							if(temp.getBounds().intersects(player.getSlashUpBounds())) {
 								if(temp.getHP() > 0) {
 									if(temp.isHit() == false) {
+										hitSound.playSound(hit);
 										temp.setHP(temp.getHP()-1);
-										temp.setHit(true);
 									}
+								}else if(temp.getHP() == 0) {
+									hitSound.playSound(kill);
 								}
 							}
 						}
@@ -350,19 +393,26 @@ public class Handler {
 							if(temp.getBounds().intersects(player.getSlashLeftBounds())) {
 								if(temp.getHP() > 0) {
 									if(temp.isHit() == false) {
+										hitSound.playSound(hit);
 										temp.setHP(temp.getHP()-1);
 										temp.setHit(true);
 									}
+								}else if(temp.getHP() == 0) {
+									hitSound.playSound(kill);
 								}
+								
 							}
 						}
 						if(player.movementAnim == 2) {
 							if(temp.getBounds().intersects(player.getSlashDownBounds())) {
 								if(temp.getHP() > 0) {
 									if(temp.isHit() == false) {
+										hitSound.playSound(hit);
 										temp.setHP(temp.getHP()-1);
 										temp.setHit(true);
 									}
+								}else if(temp.getHP() == 0) {
+									hitSound.playSound(kill);
 								}
 							}
 						}
@@ -370,17 +420,19 @@ public class Handler {
 							if(temp.getBounds().intersects(player.getSlashRightBounds())) {
 								if(temp.getHP() > 0) {
 									if(temp.isHit() == false) {
+										hitSound.playSound(hit);
 										temp.setHP(temp.getHP()-1);
 										temp.setHit(true);
 										testEnemy = temp;
 									}
+								}else if(temp.getHP() == 0) {
+									hitSound.playSound(kill);
 								}
 							}
 						}
 					}
 				}
-			}
-				
+			}	
 		}
 		//////
 		

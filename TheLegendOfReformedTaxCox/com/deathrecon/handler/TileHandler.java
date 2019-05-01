@@ -242,11 +242,12 @@ public class TileHandler implements MouseListener{
 							if(handler.linkHouse) {
 								handler.linkHouse = false;
 								handler.Level1 = true;
+								handler.update();
 
 							}else if(handler.Level1) {
 								handler.linkHouse = true;
 								handler.Level1 = false;
-	
+								handler.update();
 							}
 						}
 						//Test for layer switch. (All layer switches are on layer 0)//

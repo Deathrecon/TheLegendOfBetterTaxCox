@@ -11,6 +11,8 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 import com.deathrecon.Enum.ID;
+import com.deathrecon.audio.AudioPlayer;
+import com.deathrecon.audio.AudioThemePlayer;
 import com.deathrecon.game.GameObject;
 import com.deathrecon.handler.Handler;
 import com.deathrecon.handler.TileHandler;
@@ -42,6 +44,10 @@ public class NPC2 extends GameObject {
 	public boolean collided = false;
 	public boolean played = false;
 	public boolean instance = false;
+	File voice = new File("MC_Zelda_Hey.wav");
+	public AudioPlayer audio = new AudioPlayer();
+	public boolean play = false;
+	
 	public Player player;
 	float lastX = 0;
 	float lastY = 0;
@@ -55,6 +61,7 @@ public class NPC2 extends GameObject {
 	boolean walk = false;
 	public boolean talkProx =isTalkProx();
 	private int Timer = 0;
+	private int voiceTimer = 0;
 	
 	public NPC2() {
 		this.setId(ID.Enemy);           
@@ -203,6 +210,7 @@ public class NPC2 extends GameObject {
 
 	public void render(Graphics g) {
 		if(this.getHP() > 0) {
+			voiceTimer++;
 			getSprite(currentFrame,movementAnim);
 			g.drawImage(imageTile,(int)this.getX()-25,(int)this.getY()-40,70,70,null);
 			//g.setColor(Color.RED);
@@ -213,9 +221,18 @@ public class NPC2 extends GameObject {
 				if(handler.player.getY() < this.getY()+this.getHeight()+ 30 && handler.player.getY() > this.getY() - this.getHeight() -30) {
 					
 					g.drawImage(TEXT,(int)this.getX(),(int)this.getY()-90,100,100,null);
+					if(play) {
+						play = false;
+						audio.playSound(voice);
+						
+					}
 				
 				}
 				
+			}
+			if(voiceTimer > 200 && play == false) {
+				play = true;
+				voiceTimer = 0;
 			}
 			
 		}

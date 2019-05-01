@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import com.deathrecon.audio.AudioPlayer;
 import com.deathrecon.handler.Handler;
 
 public class PlayerAnimation{
@@ -13,6 +14,8 @@ public class PlayerAnimation{
 	private BufferedImage imageSlash;
 	private BufferedImage imageSwim;
 	private BufferedImage imageTile;
+	 public AudioPlayer audio;
+	 public File sound;
 	private Player player;
 	public Handler handler;
 	public int currentFrame = 0;
@@ -107,6 +110,7 @@ public class PlayerAnimation{
 			subtract = false;
 		}
 	}
+	
 	
 	public void Slash(int movementAnim) {
 		int spriteLocationX = 47;

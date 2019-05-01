@@ -26,7 +26,7 @@ public class Chest extends GameObject{
 	public BackgroundMove map;
 	//private int[][] tileArray = new int[11][7];
 	File Chest = new File("testChest.png");
-	File Empty = new File("testEmpty.png");
+	File Empty = new File("testEmpty.png"); 
 	public int currentFrame = 0;
 	public int movementAnim = 0;
 	public int POINTS = 0;

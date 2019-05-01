@@ -33,7 +33,14 @@ public class Player extends GameObject{
 	public int movementAnim = 0;
 	public boolean hasSword = false;
 	public boolean hasShield = false;
+	public AudioPlayer audio = new AudioPlayer();
+	File swing = new File("MC_Link_Sword2.wav");
+	public AudioPlayer runAudio = new AudioPlayer();
+	File run = new File("MC_Link_Run.wav");
+	private boolean runPlayed = false;
+	private boolean SwingPlayed = false;
 	int Sword = 0;
+	int Timer = 0;
 	public Player() {
 		this.setLayer(3);
 		this.setId(ID.Player);
@@ -50,84 +57,94 @@ public class Player extends GameObject{
 			if(handler.isSpace()) {
 				player.handler = this.handler;
 				player.slashing = true;
-				player.moving = false;
-			}
-		}
-		getMovement();
-		this.setHP(HP);
-		float newX = (this.getX() + this.getVelX());
-		float newY = (this.getY() + this.getVelY());
-		if(handler.linkHouse == false) {
-			if(handler.edgeX) {
-				if(newX == 905) {
-					handler.edgeX = false;
+				if(!SwingPlayed) {
+					SwingPlayed = true;
+					audio.playSound(swing);
 				}
 			}
-			if(handler.edgeY) {
-				if(handler.Level3) {
-					if(handler.map.getY() > -1700) {
-						if(newY > 520) {
-							handler.edgeY = false;
+		}
+			getMovement();
+			this.setHP(HP);
+			float newX = (this.getX() + this.getVelX());
+			float newY = (this.getY() + this.getVelY());
+			if(handler.linkHouse == false) {
+				if(handler.edgeX) {
+					if(newX == 905) {
+						handler.edgeX = false;
+					}
+				}
+				if(handler.edgeY) {
+					if(handler.Level3) {
+						if(handler.map.getY() > -1700) {
+							if(newY > 520) {
+								handler.edgeY = false;
+							}
+						}else {
+							if(newY < 520) {
+								handler.edgeY = false;
+							}
 						}
-					}else {
-						if(newY < 520) {
-							handler.edgeY = false;
+					}else if(handler.Level2) {
+						if(handler.map.getY() > -1700) {
+							if(newY > 520) {
+								handler.edgeY = false;
+							}
+						}else {
+							if(newY < 520) {
+								handler.edgeY = false;
+							}
+						}
+					}else if(handler.Level1) {
+						if(handler.map.getY() > -1700) {
+							if(newY > 520) {
+								handler.edgeY = false;
+							}
+						}else {
+							if(newY < 520) {
+								handler.edgeY = false;
+							}
 						}
 					}
-				}else if(handler.Level2) {
-					if(handler.map.getY() > -1700) {
-						if(newY > 520) {
-							handler.edgeY = false;
-						}
-					}else {
-						if(newY < 520) {
-							handler.edgeY = false;
-						}
-					}
+				}
+			}else {
+				handler.edgeY = true;
+				handler.edgeX = true;
+			}
+			this.setY(newY);
+			this.setX(newX);
+			if(this.getY() < 0) {
+				if(handler.Level2) {
+					handler.Level3 = true;
+					handler.Level2 = false;
+					this.setLayer(2);
+					this.setY(1080);
 				}else if(handler.Level1) {
-					if(handler.map.getY() > -1700) {
-						if(newY > 520) {
-							handler.edgeY = false;
-						}
-					}else {
-						if(newY < 520) {
-							handler.edgeY = false;
-						}
-					}
+					handler.Level1 = false;
+					handler.Level2 = true;
+					this.setLayer(1);
+					this.setY(1080);
+				}
+			}else if(this.getY() > 1080){
+				if(handler.Level3) {
+					handler.Level3 = false;
+					handler.Level2 = true;
+					this.setLayer(3);
+					this.setY(0);
+				}else if(handler.Level2) {
+					handler.Level2 = false;
+					handler.Level1 = true;
+					this.setLayer(2);
+					this.setY(0);
 				}
 			}
-		}else {
-			handler.edgeY = true;
-			handler.edgeX = true;
-		}
-		this.setY(newY);
-		this.setX(newX);
-		if(this.getY() < 0) {
-			if(handler.Level2) {
-				handler.Level3 = true;
-				handler.Level2 = false;
-				this.setLayer(2);
-				this.setY(1080);
-			}else if(handler.Level1) {
-				handler.Level1 = false;
-				handler.Level2 = true;
-				this.setLayer(1);
-				this.setY(1080);
+			if(SwingPlayed && Timer > 10) {
+				Timer = 0;
+				SwingPlayed = false;
+				
+			}else {
+				Timer++;
 			}
-		}else if(this.getY() > 1080){
-			if(handler.Level3) {
-				handler.Level3 = false;
-				handler.Level2 = true;
-				this.setLayer(3);
-				this.setY(0);
-			}else if(handler.Level2) {
-				handler.Level2 = false;
-				handler.Level1 = true;
-				this.setLayer(2);
-				this.setY(0);
-			}
-		}
-	}
+	}	
 	public void getMovement() {
 		if(this.HP > 0) {
 			if(handler.isUp()) {
@@ -136,6 +153,7 @@ public class Player extends GameObject{
 				}else {
 					this.setVelY(0);
 				}
+				
 				movementAnim = 0;
 				player.moving = true;
 			}else if(handler.isDown() == false){
@@ -184,6 +202,19 @@ public class Player extends GameObject{
 				this.setVelX(0);
 				this.setVelY(0);
 			}
+			
+			if(!runPlayed && player.moving) {
+				audio.playSound(run);
+				runPlayed = true;
+			}
+			if(runPlayed && Timer > 25) {
+				Timer = 0;
+				runPlayed = false;
+				
+			}else {
+				Timer++;
+				
+			}
 		}
 	}
 
@@ -192,6 +223,7 @@ public class Player extends GameObject{
 		if(this.HP > 0) {
 			if(player.slashing == true && player.swimming == false) {
 				if(movementAnim == 0) {
+					
 					player.Slash(movementAnim);
 					g.drawImage(imageTile,(int)this.getX()-90,(int)this.getY()-75,180,130,null);
 					//g.drawRect((int)this.getX()-65,(int)this.getY()-20,160,30);
@@ -230,6 +262,7 @@ public class Player extends GameObject{
 					player.Swim(movementAnim);
 					g.drawImage(imageTile,(int)this.getX()-28,(int)this.getY()-10,100,100,null);
 				}
+				
 			}else {
 				player.Walk(movementAnim);
 				g.drawImage(imageTile,(int)this.getX()-25,(int)this.getY()-40,100,100,null);
