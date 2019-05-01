@@ -31,7 +31,15 @@ public class Player extends GameObject{
 	public int RupCount = 0;
 	public double SHIELD = 1;
 	public int movementAnim = 0;
+	public AudioPlayer audio = new AudioPlayer();
+	File swing = new File("MC_Link_Sword2.wav");
+	
+	public AudioPlayer runAudio = new AudioPlayer();
+	File run = new File("MC_Link_Run.wav");
+	private boolean runPlayed = false;
+	private boolean SwingPlayed = false;
 	int Sword = 0;
+	int Timer = 0;
 	public Player() {
 		this.setLayer(3);
 		this.setId(ID.Player);
@@ -47,7 +55,10 @@ public class Player extends GameObject{
 		if(handler.isSpace()) {
 			player.handler = this.handler;
 			player.slashing = true;
-			player.moving = false;
+			if(!SwingPlayed) {
+				SwingPlayed = true;
+				audio.playSound(swing);
+			}
 		}
 		getMovement();
 		this.setHP(HP);
@@ -123,6 +134,14 @@ public class Player extends GameObject{
 				this.setY(0);
 			}
 		}
+		if(SwingPlayed && Timer > 10) {
+			Timer = 0;
+			SwingPlayed = false;
+			
+		}else {
+			Timer++;
+			
+		}
 	}
 	public void getMovement() {
 		if(this.HP > 0) {
@@ -132,6 +151,7 @@ public class Player extends GameObject{
 				}else {
 					this.setVelY(0);
 				}
+				
 				movementAnim = 0;
 				player.moving = true;
 			}else if(handler.isDown() == false){
@@ -180,6 +200,19 @@ public class Player extends GameObject{
 				this.setVelX(0);
 				this.setVelY(0);
 			}
+			
+			if(!runPlayed && player.moving) {
+				audio.playSound(run);
+				runPlayed = true;
+			}
+			if(runPlayed && Timer > 25) {
+				Timer = 0;
+				runPlayed = false;
+				
+			}else {
+				Timer++;
+				
+			}
 		}
 	}
 
@@ -188,6 +221,7 @@ public class Player extends GameObject{
 		if(this.HP > 0) {
 			if(player.slashing == true) {
 				if(movementAnim == 0) {
+					
 					player.Slash(movementAnim);
 					g.drawImage(imageTile,(int)this.getX()-90,(int)this.getY()-75,180,130,null);
 					g.drawRect((int)this.getX()-65,(int)this.getY()-20,160,30);
@@ -208,9 +242,11 @@ public class Player extends GameObject{
 					g.drawRect((int)this.getX()-60,(int)this.getY()-40,50,150);
 				}
 				handler.updateEnemies();
+				
 			}else {
 				player.Walk(movementAnim);
 				g.drawImage(imageTile,(int)this.getX()-25,(int)this.getY()-40,100,100,null);
+				
 				g.setColor(Color.RED);
 				g.drawRect((int)this.getX()-5,(int)this.getY()+25,58,35);
 			}

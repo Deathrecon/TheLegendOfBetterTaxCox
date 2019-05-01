@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import com.deathrecon.Enum.ID;
+import com.deathrecon.audio.AudioPlayer;
 import com.deathrecon.game.GameObject;
 import com.deathrecon.handler.Handler;
 import com.deathrecon.handler.TileHandler;
@@ -33,6 +34,8 @@ public class Pot extends GameObject {
 	public boolean rupeePickeUp = false;
 	public boolean collisionPlaced = false;
 	public boolean hit = false;
+	File shatter = new File("MC_Shatter.wav");
+	public AudioPlayer sfx = new AudioPlayer();
 	
 	public Pot() {
 		this.setId(ID.Enemy);
@@ -122,6 +125,7 @@ public class Pot extends GameObject {
 		
 	}else {
 		if(rupeeDropped == false) {
+			sfx.playSound(shatter);
 			handler.addObject(new Rupee(ID.Rupee,(int)this.getX() - (int)map.getX(),(int)this.getY() - (int)map.getY(),30,40,this.getLayer(),this.getMap(),this.getHandler(),this.getTileHandler()), this.getLevel());
 			rupeeDropped = true;
 			

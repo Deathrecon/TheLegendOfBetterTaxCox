@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
 import com.deathrecon.Enum.ID;
+import com.deathrecon.audio.AudioPlayer;
 import com.deathrecon.game.GameObject;
 import com.deathrecon.handler.Handler;
 import com.deathrecon.handler.TileHandler;
@@ -28,6 +29,9 @@ public class NPC extends GameObject implements ActionListener{
 	public BackgroundMove map;
 	public Timer waitTimer;
 	public Timer walkTimer;
+	public File voice;
+	public AudioPlayer audio = new AudioPlayer();
+	public boolean play = false;
 	//private int[][] tileArray = new int[11][7];
 	File file;
 	File text;
@@ -52,6 +56,7 @@ public class NPC extends GameObject implements ActionListener{
 	boolean wait = true;
 	boolean walk = false;
 	public boolean talkProx =isTalkProx();
+	int Timer = 0;
 	
 	public NPC() {
 		this.setId(ID.Enemy);
@@ -80,6 +85,7 @@ public class NPC extends GameObject implements ActionListener{
 		waitTimer = new Timer(2000,this);
 		walkTimer = new Timer(500,this);
 		waitTimer.start();
+		voice = new File("MC_CastleGuard_Hey.wav");
 		loadImage();
 	}
 	
@@ -185,18 +191,27 @@ public class NPC extends GameObject implements ActionListener{
 			g.drawImage(imageTile,(int)this.getX()-25,(int)this.getY()-40,70,70,null);
 			g.setColor(Color.RED);
 			g.drawRect((int)this.getX()-15,(int)this.getY()-25, 60, 55);
+			Timer++;
 			
 			if(handler.player.getX() <= this.getX()+this.getWidth()+30 && handler.player.getX() > this.getX()-this.getWidth()-30){
 				
 				if(handler.player.getY() < this.getY()+this.getHeight()+ 30 && handler.player.getY() > this.getY() - this.getHeight() -60) {
-					
+					if(play) {
+						play = false;
+						audio.playSound(voice);
+						
+					}
 					g.drawImage(TEXT,(int)this.getX()+20,(int)this.getY()-90,70,70,null);
-				
 				}
 				
 			}
+			if(Timer > 200 && play == false) {
+				play = true;
+				Timer = 0;
+			}
 			
 		}
+
 	}
 
 

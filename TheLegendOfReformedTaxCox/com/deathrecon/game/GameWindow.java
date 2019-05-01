@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 
 import com.deathrecon.game.Game;
 
-public class GameWindow {
+/*public class GameWindow {
 	private static final int WIDTH=1920;
 	private static final int HEIGHT=1040;
 	private JFrame window;
@@ -30,3 +30,4 @@ public class GameWindow {
 		GameWindow gameWindow = new GameWindow("The Legend Of Rynn");
 	}
 }
+*/
