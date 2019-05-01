@@ -144,10 +144,13 @@ public class Handler {
 					}
 					if(temp.getId() == ID.Enemy) {
 						if(temp.getBounds().intersects(player.getBounds())) {
-							if(player.isHit() == false) {
-								player.HP--;
-								player.setHit(true);
+								if(temp.getHP() > 0) {
+									if(player.isHit() == false) {
+										player.HP--;
+										player.setHit(true);
+								}
 							}
+							
 						}
 					}
 					temp.update();
@@ -190,10 +193,13 @@ public class Handler {
 					}
 					if(temp.getId() == ID.Enemy) {
 						if(temp.getBounds().intersects(player.getBounds())) {
-							if(player.isHit() == false) {
-								player.HP--;
-								player.setHit(true);
+								if(temp.getHP() > 0) {
+									if(player.isHit() == false) {
+										player.HP--;
+										player.setHit(true);
+								}
 							}
+							
 						}
 					}
 					temp.update();
@@ -239,10 +245,13 @@ public class Handler {
 					}
 					if(temp.getId() == ID.Enemy) {
 						if(temp.getBounds().intersects(player.getBounds())) {
-							if(player.isHit() == false) {
-								player.HP--;
-								player.setHit(true);
+								if(temp.getHP() > 0) {
+									if(player.isHit() == false) {
+										player.HP--;
+										player.setHit(true);
+								}
 							}
+							
 						}
 					}
 					temp.update();

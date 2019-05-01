@@ -32,7 +32,6 @@ public class NPC extends GameObject implements ActionListener{
 	public File voice;
 	public AudioPlayer audio = new AudioPlayer();
 	public boolean play = false;
-	//private int[][] tileArray = new int[11][7];
 	File file;
 	File text;
 	public int currentFrame = 0;

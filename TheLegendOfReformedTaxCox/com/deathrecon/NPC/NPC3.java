@@ -23,7 +23,6 @@ public class NPC3 extends GameObject{
 	private BufferedImage imageTile;
 	private BufferedImage TEXT;
 	public BackgroundMove map;
-	//private int[][] tileArray = new int[11][7];
 	File file;
 	File text;
 	public int currentFrame = 0;

@@ -30,7 +30,6 @@ public class Octorok extends GameObject implements ActionListener{
 	public BackgroundMove map;
 	public Timer waitTimer;
 	public Timer walkTimer;
-	//private int[][] tileArray = new int[11][7];
 	File file;
 	public int currentFrame = 0;
 	public int movementAnim = 0;

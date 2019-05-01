@@ -25,7 +25,6 @@ public class Chest extends GameObject{
 	private BufferedImage EmptyChest;
 	private BufferedImage imageTile;
 	public BackgroundMove map;
-	//private int[][] tileArray = new int[11][7];
 	AudioPlayer audio = new AudioPlayer();
 	File Chest = new File("testChest.png");
 	File Empty = new File("testEmpty.png"); 
