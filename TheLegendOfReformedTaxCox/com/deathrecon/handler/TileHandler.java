@@ -21,6 +21,7 @@ import com.deathrecon.NPC.NPC;
 import com.deathrecon.NPC.NPC2;
 import com.deathrecon.NPC.NPC3;
 import com.deathrecon.enemy.Octorok;
+import com.deathrecon.enemy.Soldier;
 import com.deathrecon.game.GameObject;
 import com.deathrecon.map.BackgroundMove;
 import com.deathrecon.player.Player;
@@ -62,6 +63,7 @@ public class TileHandler implements MouseListener{
 		public NPC2 currentNPC2;
 		public NPC3 currentNPC3;
 		public Pot currentPot;
+		public Soldier currentSoldier;
 		public boolean level1Loaded = false;
 		public boolean level2Loaded = false;
 		public boolean level3Loaded = false;
@@ -467,7 +469,7 @@ public class TileHandler implements MouseListener{
 					}else if(id == 4) {
 						g.drawString("Current ID: Octorok" , 870,970);
 					}else if(id == 5) {
-						
+						g.drawString("Current ID: Soldier", 870, 970);
 					}else if(id == 6) {
 						g.drawString("Current ID: NPC2" , 870,970);
 					}else if(id == 7) {
@@ -566,7 +568,7 @@ public class TileHandler implements MouseListener{
 					}else if(id == 13) {
 						handler.addObject(new Octorok(ID.Enemy,x,y,width,height,layer,back,handler,this),count);
 					}else if (id == 14) {
-						
+						handler.addObject(new Soldier(ID.Enemy, x, y, width, height,layer,back,handler,this),count);
 					}else if(id == 15) {
 						handler.addObject(new NPC2(ID.NPC,x,y,width,height,layer,back,handler,this),count);
 					}else if(id == 16) {
@@ -698,7 +700,7 @@ public class TileHandler implements MouseListener{
 					entityWriter.printf("%d,%d,%d,%d,%d,%d,", id, (int)currentOcto.getX(),(int)currentOcto.getY(),currentOcto.getWidth(),currentOcto.getHeight(),currentOcto.getLayer());
 					id = 4;
 				}else if(id == 14) {
-					
+					entityWriter.printf("%d,%d,%d,%d,%d,%d,", id, (int)currentSoldier.getX(),(int)currentSoldier.getY(),currentSoldier.getWidth(),currentSoldier.getHeight(),currentSoldier.getLayer());
 					id = 5;
 				}else if(id == 15) {
 					entityWriter.printf("%d,%d,%d,%d,%d,%d,", id, (int)currentNPC2.getX(),(int)currentNPC2.getY(),currentNPC2.getWidth(),currentNPC2.getHeight(),currentNPC2.getLayer());
@@ -849,7 +851,16 @@ public class TileHandler implements MouseListener{
 						currentOcto.setHeight(70);
 						handler.addObject(tempOcto);
 					}else if(id == 5) {
-						
+						currentSoldier = new Soldier();
+						Soldier tempSoldier = new Soldier(ID.Enemy, e.getX() - (int)back.getX(),e.getY() - (int)back.getY(),70,70,layer,back,handler,this);
+						tempSoldier.setTileHandler(this);
+						tempSoldier.instance = true;
+						currentSoldier.setLayer(tempSoldier.getLayer());
+						currentSoldier.setX(tempSoldier.getX());
+						currentSoldier.setY(tempSoldier.getY());
+						currentSoldier.setWidth(100);
+						currentSoldier.setHeight(100);
+						handler.addObject(tempSoldier);
 					}else if(id == 6) {
 						currentNPC2 = new NPC2();
 						NPC2 tempNPC2 = new NPC2(ID.NPC, e.getX() - (int)back.getX(),e.getY() - (int)back.getY(),70,70,layer,back,handler,this);

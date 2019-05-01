@@ -1,5 +1,6 @@
 package WorldObjects;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -28,11 +29,13 @@ public class Pot extends GameObject {
 	float newY = 500;
 	public Handler handler;
 	public BackgroundMove map;
-	
+	public boolean rupeeDropped = false;
+	public boolean rupeePickeUp = false;
 	public boolean collisionPlaced = false;
+	public boolean hit = false;
 	
 	public Pot() {
-		this.setId(ID.WorldObjectPot);
+		this.setId(ID.Enemy);
 		this.setX(900);
 		this.setY(300);
 		this.setHeight(50);
@@ -60,16 +63,16 @@ public class Pot extends GameObject {
 		map = this.getMap();
 		handler = this.getHandler();
 		vase = new File("Vase.png");
-			if(vaseHealth == 2) {
+		if(vaseHealth > 0) {
 			try {
 				Vase = ImageIO.read(vase);
 			}catch (IOException e) {
 				e.printStackTrace();
 			}
-		}else if(vaseHealth == 1) {
-			
-		}else if(vaseHealth == 0) {
 		}
+			
+		
+		
 	}
 	
 	
@@ -98,25 +101,37 @@ public class Pot extends GameObject {
 		}
 		this.setY(newY);
 		this.setX(newX);
-		
+		if(handler.isSpace()) {
+				if(this.getBounds().intersects(handler.player.getSlashDownBounds()) || this.getBounds().intersects(handler.player.getSlashUpBounds()) || this.getBounds().intersects(handler.player.getSlashLeftBounds()) || this.getBounds().intersects(handler.player.getSlashRightBounds())){
+					hit = true;
+					if(hit) {
+					vaseHealth--;
+					hit = false;
+					
+			}
+		}
 	}
+	
+		
+}
 
 	@Override
 	public void render(Graphics g) {
-
-		if(vaseHealth > 0) {
-			g.drawImage(Vase,(int)getX(),(int)getY(),getWidth(),getHeight(),null);
-		}else if(vaseHealth <= 0) {
-			for(int index = 0; index < 3; index++) {
-				g.drawImage(Vase,(int)getX()+(20 * index),(int)getY(),30,30,null);
-			}
+		if(this.vaseHealth > 0) {
+		g.drawImage(Vase,(int)this.getX(),(int)this.getY(),50,50,null);
+		
+	}else {
+		if(rupeeDropped == false) {
+			handler.addObject(new Rupee(ID.Rupee,(int)this.getX() - (int)map.getX(),(int)this.getY() - (int)map.getY(),30,40,this.getLayer(),this.getMap(),this.getHandler(),this.getTileHandler()), this.getLevel());
+			rupeeDropped = true;
 			
 		}
+	}}
 		
 		
 		
 		
-	}
+	
 
 	@Override
 	public Rectangle getBounds() {
