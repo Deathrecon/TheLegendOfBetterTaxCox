@@ -40,8 +40,8 @@ public class BackgroundMove extends GameObject{
 		this.image = this.getImage();
 		if(first == false) {
 			if(init) {
-				this.setX(-1000);
-				this.setY(-1000);
+				//this.setX(-1000);
+				//this.setY(-1000);
 				init = false;
 			}
 		}else {

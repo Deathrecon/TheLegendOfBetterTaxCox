@@ -19,7 +19,7 @@ import com.deathrecon.Item.Chest;
 
 import com.deathrecon.HUD.HUD;
 import com.deathrecon.HUD.Hearts;
-import com.deathrecon.HUD.Rupee;
+import com.deathrecon.HUD.Rupees;
 import com.deathrecon.audio.*;
 import com.deathrecon.intro.*;
 import com.deathrecon.map.*;
@@ -52,7 +52,7 @@ public class Game extends JPanel implements ActionListener {
 	private KeyInputHandler key;
 	private HUD hud;
 	private Hearts lifeBar;
-	private Rupee rups;
+	private Rupees rups;
 	
 	public Game(Dimension dim) {
 		this.setPreferredSize(dim);
@@ -66,6 +66,7 @@ public class Game extends JPanel implements ActionListener {
 		timer = new Timer(20,this);
 		timer.start();
 		
+		
 	}
 	
 	public void init() {
@@ -74,7 +75,7 @@ public class Game extends JPanel implements ActionListener {
 		lifeBar = new Hearts();
 		hud = new HUD();
 		lifeBar.player = this.player;
-		rups = new Rupee();
+		rups = new Rupees();
 		backGround = new BackgroundMove();
 		layer3 = new Layer3();
 		layer2 = new Layer2();

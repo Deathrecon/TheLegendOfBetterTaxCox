@@ -3,24 +3,33 @@ package com.deathrecon.enemy;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.swing.Timer;
 
 import com.deathrecon.Enum.ID;
 import com.deathrecon.game.GameObject;
 import com.deathrecon.handler.Handler;
 import com.deathrecon.handler.TileHandler;
 import com.deathrecon.map.BackgroundMove;
+import com.deathrecon.tilemap.LayerTile;
+import com.deathrecon.tilemap.Tile;
 
-public class Octorok extends GameObject{
+import WorldObjects.Rupee;
+
+public class Octorok extends GameObject implements ActionListener{
 	public Handler handler;
 	private BufferedImage image;
 	private BufferedImage imageTile;
 	public BackgroundMove map;
+	public Timer waitTimer;
+	public Timer walkTimer;
 	//private int[][] tileArray = new int[11][7];
 	File file;
 	public int currentFrame = 0;
@@ -34,19 +43,16 @@ public class Octorok extends GameObject{
 	public boolean subtract = false;
 	public boolean second = false;
 	public boolean moving = false;
-	public boolean falling = false;
-	public boolean sideCollide = false;
-	public boolean collided = false;
+	public boolean init = true;
 	public boolean played = false;
 	public boolean instance = false;
+	public boolean rupeeDropped = false;
 	float lastX = 0;
 	float lastY = 0;
 	float newX = 500;
 	float newY = 500;
 	int decision = 0;
 	int frameTimer = 0;
-	int waitTimer = 0;
-	int walkTimer = 0;
 	boolean wait = true;
 	boolean walk = false;
 	
@@ -56,10 +62,8 @@ public class Octorok extends GameObject{
 		this.setY(702);
 		this.setHeight(100);
 		this.setWidth(100);
-
 		handler = this.getHandler();
 		map = this.getMap();
-		System.out.println("IS THIS RUNNING?");
 		loadImage();
 	}
 	
@@ -74,6 +78,9 @@ public class Octorok extends GameObject{
 		this.setMap(map);
 		this.setTileHandler(tileHandler);
 		this.setHP(3);
+		waitTimer = new Timer(2000,this);
+		walkTimer = new Timer(500,this);
+		waitTimer.start();
 		loadImage();
 	}
 	
@@ -133,13 +140,15 @@ public class Octorok extends GameObject{
 				movementAnim = 3;
 				this.setVelX(-7);
 		}
-		walkTimer++;
 		
 	}
 
 	public void update() {
-		handler = this.getHandler();
-		map = this.getMap();
+		if(init) {
+			handler = this.getHandler();
+			map = this.getMap();
+			init = false;
+		}
 		if(map.getX() != lastX) {
 			newX = ((this.getX() + (map.getX()-lastX)) + this.getVelX());
 			lastX = map.getX();
@@ -159,21 +168,7 @@ public class Octorok extends GameObject{
 				moving = false;
 				this.setVelY(0);
 				this.setVelX(0);
-				waitTimer++;
-	            if(waitTimer == 100) {
-	            	Random rand = new Random();
-	            	decision = rand.nextInt(3);
-	                this.setWait(false);
-	                waitTimer = 0;
-	            }
-	        }
-	        if(this.isWaiting() == false) {
-	            getMovement();
-	            if(walkTimer == 15) {
-	            	walkTimer = 0;
-	            	this.setWait(true);
-	            }
-	        }
+			}
 		}
 		
 	}
@@ -185,11 +180,35 @@ public class Octorok extends GameObject{
 			g.drawImage(imageTile,(int)this.getX()-25,(int)this.getY()-40,70,70,null);
 			g.setColor(Color.RED);
 			g.drawRect((int)this.getX()-15,(int)this.getY()-25, 60, 55);
+		}else {
+			if(rupeeDropped == false) {
+				waitTimer.stop();
+				walkTimer.stop();
+				handler.addObject(new Rupee(ID.Rupee,(int)this.getX() - (int)map.getX(),(int)this.getY() - (int)map.getY(),30,40,this.getLayer(),this.getMap(),this.getHandler(),this.getTileHandler()), this.getLevel());
+				rupeeDropped = true;
+				System.out.println("RUPEE DROPPED");
+			}
 		}
 	}
 
 
 	public Rectangle getBounds() {
 		return new Rectangle((int)this.getX()-15,(int)this.getY()-25, 60, 55);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent a) {
+		if(a.getSource() == waitTimer) {
+			Random rand = new Random();
+			decision = rand.nextInt(3);
+			getMovement();
+        	this.setWait(false);
+        	walkTimer.start();
+        	waitTimer.stop();
+		}else {
+	        this.setWait(true);
+	        waitTimer.start();
+	        walkTimer.stop();
+		}
 	}
 }

@@ -19,6 +19,7 @@ public abstract class GameObject {
 	private float velX;
 	private float velY;
 	private int layer;
+	private int level;
 	private ID id;
 	private int height;
 	private int width;
@@ -152,6 +153,12 @@ public abstract class GameObject {
 	}
 	public void setBlockedDecision(int blockedDecision) {
 		this.blockedDecision = blockedDecision;
+	}
+	public int getLevel() {
+		return level;
+	}
+	public void setLevel(int level) {
+		this.level = level;
 	}
 
 }

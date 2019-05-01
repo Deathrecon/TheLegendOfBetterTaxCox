@@ -115,7 +115,6 @@ public class World extends GameObject {
 		}
 		this.setY(newY);
 		this.setX(newX);
-		
 	}
 
 	@Override

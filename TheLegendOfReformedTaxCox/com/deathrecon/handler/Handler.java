@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.util.LinkedList;
 
 import com.deathrecon.Enum.ID;
+import com.deathrecon.enemy.Octorok;
 import com.deathrecon.game.GameObject;
 import com.deathrecon.map.BackgroundMove;
 import com.deathrecon.player.Player;
@@ -34,6 +35,7 @@ public class Handler {
 		public TileHandler tileHandler;
 		public BackgroundMove map;
 		public Player player;
+		public GameObject testEnemy;
 		GameObject tempPlayer;
 		GameObject tempLayer1;
 		GameObject tempLayer2;
@@ -99,6 +101,13 @@ public class Handler {
 				changedLevel1 = false;
 				for(int i = 0; i < entitiesLevel3.size(); i++) {
 					temp = entitiesLevel3.get(i);
+					if(temp.getId() == ID.Rupee) {
+						if(player.getBounds().intersects(temp.getBounds())) {
+							System.out.println("HELLO?");
+							temp.setX(-10000000);
+							player.RupCount += 10;
+						}
+					}
 					temp.update();
 				}
 			}else if(Level2){
@@ -124,6 +133,13 @@ public class Handler {
 				
 				for(int i = 0; i < entitiesLevel2.size(); i++) {
 					temp = entitiesLevel2.get(i);
+					if(temp.getId() == ID.Rupee) {
+						if(player.getBounds().intersects(temp.getBounds())) {
+							System.out.println("HELLO?");
+							temp.setX(-10000000);
+							player.RupCount += 10;
+						}
+					}
 					temp.update();
 				}
 			}else if(Level1) {
@@ -144,6 +160,13 @@ public class Handler {
 				changedLevel3 = false;
 				for(int i = 0; i < entitiesLevel1.size(); i++) {
 					temp = entitiesLevel1.get(i);
+					if(temp.getId() == ID.Rupee) {
+						if(player.getBounds().intersects(temp.getBounds())) {
+							System.out.println("HELLO?");
+							temp.setX(-10000000);
+							player.RupCount += 10;
+						}
+					}
 					temp.update();
 				}
 			}
@@ -152,7 +175,7 @@ public class Handler {
 		
 		public void render(Graphics g) {
 			//Layer mapping and rendering//
-			GameObject temp;;
+			GameObject temp;
 			for(int i = 0; i < object.size(); i++)
 			{
 				temp = object.get(i);
@@ -170,7 +193,6 @@ public class Handler {
 					tempRupee = temp;
 				}else if(temp.getId() == ID.HUD){
 					tempHUD = temp;
-					
 				}else {
 					temp.render(g);
 				}
@@ -232,7 +254,6 @@ public class Handler {
 			}else if(Level2) {
 				for(int i = 0; i < entitiesLevel2.size(); i++){
 					GameObject temp = entitiesLevel2.get(i);
-					
 					temp.update();
 				}
 			}
@@ -251,7 +272,6 @@ public class Handler {
 			}
 			for(int i = 0; i < currentList.size(); i++) {
 				GameObject temp = currentList.get(i);
-				temp.update();
 				if(this.isSpace()) {
 					if(player.movementAnim == 0) {
 						if(temp.getBounds().intersects(player.getSlashUpBounds())) {
@@ -289,6 +309,7 @@ public class Handler {
 								if(temp.isHit() == false) {
 									temp.setHP(temp.getHP()-1);
 									temp.setHit(true);
+									testEnemy = temp;
 								}
 							}
 						}
@@ -300,12 +321,16 @@ public class Handler {
 		//////
 		
 		public void refresh() {
+			for(int i = 0; i < enemiesLevel1.size(); i++) {
+				GameObject temp = enemiesLevel1.get(i);
+				temp.setHit(false);
+			}
 			for(int i = 0; i < enemiesLevel2.size(); i++) {
-				GameObject temp = entitiesLevel2.get(i);
+				GameObject temp = enemiesLevel2.get(i);
 				temp.setHit(false);
 			}
 			for(int i = 0; i < enemiesLevel3.size(); i++) {
-				GameObject temp = entitiesLevel3.get(i);
+				GameObject temp = enemiesLevel3.get(i);
 				temp.setHit(false);
 			}
 		}
@@ -314,18 +339,30 @@ public class Handler {
 			object.add(temp);
 		}
 		public void addObject(GameObject temp,int level) {
-			if(level == 2) {
-				if(temp.getId() == ID.Enemy || temp.getId() == ID.Chest || temp.getId() == ID.WorldObjectPot || temp.getId() == ID.NPC) {
+			if(level == 0) {
+				if(temp.getId() == ID.Enemy || temp.getId() == ID.Chest || temp.getId() == ID.Rupee || temp.getId() == ID.WorldObjectPot || temp.getId() == ID.NPC) {
+					entitiesLevel1.add(temp);
+					temp.setLevel(level);
+					if(temp.getId() == ID.Enemy) {
+						temp.setHandler(this);
+						temp.setMap(map);
+						enemiesLevel1.add(temp);
+					}
+				}
+			}else if(level == 1) {
+				if(temp.getId() == ID.Enemy || temp.getId() == ID.Chest || temp.getId() == ID.Rupee || temp.getId() == ID.WorldObjectPot || temp.getId() == ID.NPC) {
 					entitiesLevel2.add(temp);
+					temp.setLevel(level);
 					if(temp.getId() == ID.Enemy) {
 						temp.setHandler(this);
 						temp.setMap(map);
 						enemiesLevel2.add(temp);
 					}
 				}
-			}else if(level == 3) {
-				if(temp.getId() == ID.Enemy || temp.getId() == ID.Chest || temp.getId() == ID.WorldObjectPot) {
+			}else if(level == 2) {
+				if(temp.getId() == ID.Enemy || temp.getId() == ID.Chest || temp.getId() == ID.Rupee || temp.getId() == ID.WorldObjectPot) {
 					entitiesLevel3.add(temp);
+					temp.setLevel(level);
 					if(temp.getId() == ID.Enemy) {
 						temp.setHandler(this);
 						temp.setMap(map);

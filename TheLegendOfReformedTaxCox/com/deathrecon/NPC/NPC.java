@@ -3,12 +3,15 @@ package com.deathrecon.NPC;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.swing.Timer;
 
 import com.deathrecon.Enum.ID;
 import com.deathrecon.game.GameObject;
@@ -17,12 +20,14 @@ import com.deathrecon.handler.TileHandler;
 import com.deathrecon.map.BackgroundMove;
 import com.deathrecon.player.Player;
 
-public class NPC extends GameObject {
+public class NPC extends GameObject implements ActionListener{
 	public Handler handler;
 	private BufferedImage image;
 	private BufferedImage imageTile;
 	private BufferedImage TEXT;
 	public BackgroundMove map;
+	public Timer waitTimer;
+	public Timer walkTimer;
 	//private int[][] tileArray = new int[11][7];
 	File file;
 	File text;
@@ -44,8 +49,6 @@ public class NPC extends GameObject {
 	int blockedDecision = 4;
 	int decision = 0;
 	int frameTimer = 0;
-	int waitTimer = 0;
-	int walkTimer = 0;
 	boolean wait = true;
 	boolean walk = false;
 	public boolean talkProx =isTalkProx();
@@ -74,6 +77,9 @@ public class NPC extends GameObject {
 		this.setMap(map);
 		this.setTileHandler(tileHandler);
 		this.setHP(3);
+		waitTimer = new Timer(2000,this);
+		walkTimer = new Timer(500,this);
+		waitTimer.start();
 		loadImage();
 	}
 	
@@ -142,7 +148,6 @@ public class NPC extends GameObject {
 				this.setVelX(-7);
 		}
 		this.setBlockedDecision(4);
-		walkTimer++;
 		
 	}
 
@@ -168,23 +173,6 @@ public class NPC extends GameObject {
 				moving = false;
 				this.setVelY(0);
 				this.setVelX(0);
-				waitTimer++;
-	            if(waitTimer == 50) {
-	            	Random rand = new Random();
-	            	decision = rand.nextInt(3);
-	            	while(decision == this.getBlockedDecision()) {
-	            		decision = rand.nextInt(3);
-	            	}
-	                this.setWait(false);
-	                waitTimer = 0;
-	            }
-	        }
-	        if(this.isWaiting() == false) {
-	            getMovement();
-	            if(walkTimer == 15) {
-	            	walkTimer = 0;
-	            	this.setWait(true);
-	            }
 	        }
 		}
 		
@@ -214,6 +202,22 @@ public class NPC extends GameObject {
 
 	public Rectangle getBounds() {
 		return new Rectangle((int)this.getX()-15,(int)this.getY()-25, 60, 55);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent a) {
+		if(a.getSource() == waitTimer) {
+			Random rand = new Random();
+			decision = rand.nextInt(3);
+			getMovement();
+        	this.setWait(false);
+        	walkTimer.start();
+        	waitTimer.stop();
+		}else {
+	        this.setWait(true);
+	        waitTimer.start();
+	        walkTimer.stop();
+		}
 	}
 }
 

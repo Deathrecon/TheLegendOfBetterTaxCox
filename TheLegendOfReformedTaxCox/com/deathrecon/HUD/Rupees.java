@@ -11,13 +11,13 @@ import javax.imageio.ImageIO;
 import com.deathrecon.Enum.ID;
 import com.deathrecon.player.Player;
 
-public class Rupee extends HUD{
+public class Rupees extends HUD{
 	//YeEt
 	private BufferedImage image;
 	public Player player;
 	File file = new File("Rupo.png");
 	
-	public Rupee() {
+	public Rupees() {
 		this.setId(ID.HUDRUPEE);
 		this.setX(1600);
 		this.setY(950);

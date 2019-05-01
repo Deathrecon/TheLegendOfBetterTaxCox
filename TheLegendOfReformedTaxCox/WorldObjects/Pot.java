@@ -18,7 +18,6 @@ import com.deathrecon.player.Player;
 public class Pot extends GameObject {
 	BufferedImage image;
 	BufferedImage Vase;
-	public World world;
 	File file;
 	File vase;
 	public int vaseHealth = 2;
@@ -61,7 +60,6 @@ public class Pot extends GameObject {
 		map = this.getMap();
 		handler = this.getHandler();
 		vase = new File("Vase.png");
-		file = new File("Rupo.png");
 			if(vaseHealth == 2) {
 			try {
 				Vase = ImageIO.read(vase);
@@ -71,13 +69,6 @@ public class Pot extends GameObject {
 		}else if(vaseHealth == 1) {
 			
 		}else if(vaseHealth == 0) {
-			
-			
-			try {
-				Vase = ImageIO.read(file);
-			}catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 	}
 	
@@ -129,8 +120,7 @@ public class Pot extends GameObject {
 
 	@Override
 	public Rectangle getBounds() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Rectangle((int)this.getX()-15,(int)this.getY()-25, 60, 55);
 	}
 }
 

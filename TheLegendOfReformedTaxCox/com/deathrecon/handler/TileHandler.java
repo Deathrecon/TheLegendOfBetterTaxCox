@@ -43,6 +43,7 @@ public class TileHandler implements MouseListener{
 		public int xMousePos = 0;
 		public int yMousePos = 0;
 		public int layer = 1;
+		public int numLevels = 3;
 		public int id = 4;
 		public boolean rectanglePlaced = false;
 		public boolean entityPlaced = false;
@@ -60,6 +61,7 @@ public class TileHandler implements MouseListener{
 		public NPC2 currentNPC2;
 		public NPC3 currentNPC3;
 		public Pot currentPot;
+		public boolean level1Loaded = false;
 		public boolean level2Loaded = false;
 		public boolean upBlocked = false;
 		public boolean downBlocked = false;
@@ -68,6 +70,8 @@ public class TileHandler implements MouseListener{
 		public boolean edgeX = false;
 		public boolean edgeY = false;
 		public World w;
+		File level1MapFile = new File("Level1CollisionMap.txt");
+		File level1EntityFile = new File("Level1EntityMap.txt");
 		File level2MapFile = new File("Level2CollisionMap.txt");
 		File level2EntityFile = new File("Level2EntityMap.txt");
 		File level3MapFile = new File("Level3CollisionMap.txt");
@@ -455,148 +459,106 @@ public class TileHandler implements MouseListener{
 		
 		//Initialization of tile files//
 		public void initTiles() {
-			int id = 0;
-			int x = 0;
-			int y = 0;
-			int width = 0;
-			int height = 0;
-			int layer = 0;
-			//Init of scanners to read files in//
-			Scanner mapReader = null;
-			try {
-				mapReader = new Scanner(new FileReader(level2MapFile));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			Scanner entityReader = null;
-			try {
-				entityReader = new Scanner(new FileReader(level2EntityFile));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			//Delimiter setting//
-			mapReader.useDelimiter(",");
-			entityReader.useDelimiter(",");
-			////
-			//Reading through entire Level2Map File//
-			while(mapReader.hasNext()) {
-				id = Integer.parseInt(mapReader.next());
-				x = Integer.parseInt(mapReader.next());
-				y = Integer.parseInt(mapReader.next());
-				width = Integer.parseInt(mapReader.next());
-				height = Integer.parseInt(mapReader.next());
-				layer = Integer.parseInt(mapReader.next());
-				//Tile Loading
-				//ID sorting so the program knows what is what.//
-				if(id == 1) {
-					this.addTile(ID.Layer1Switch,x,y, width, height, layer);
-				}else if(id == 2) {
-					this.addTile(ID.Layer2Switch,x,y, width, height, layer);
-				}else if(id == 3) {
-					this.addTile(ID.Layer3Switch,x,y, width, height, layer);
-				}else if(id == 4) {
-					this.addTile(ID.CollisionTile,x,y, width, height, layer);
-				}else if(id == 5) {
-					this.addTile(ID.WaterTile,x,y, width, height, layer);
-				}else if(id == 6) {
-					this.addTile(ID.JumpTile,x,y, width, height, layer);
+			File currentCollisionMap = level1MapFile;
+			File currentEntityMap = level1EntityFile;
+			int count = 0;
+			while(count < numLevels) {
+				if(count == 1) {
+					currentCollisionMap = level2MapFile;
+					currentEntityMap = level2EntityFile;
+				}else if(count == 2) {
+					currentCollisionMap = level3MapFile;
+					currentEntityMap = level3EntityFile;
 				}
+				int id = 0;
+				int x = 0;
+				int y = 0;
+				int width = 0;
+				int height = 0;
+				int layer = 0;
+				Scanner mapReader = null;
+				try {
+					mapReader = new Scanner(new FileReader(currentCollisionMap));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				Scanner entityReader = null;
+				try {
+					entityReader = new Scanner(new FileReader(currentEntityMap));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				//Delimiter setting//
+				mapReader.useDelimiter(",");
+				entityReader.useDelimiter(",");
 				////
-			}
-			//Reading through entire Leve2EntityMap File//
-			while(entityReader.hasNext()) {
-				id = Integer.parseInt(entityReader.next());
-				x = Integer.parseInt(entityReader.next());
-				y = Integer.parseInt(entityReader.next());
-				width = Integer.parseInt(entityReader.next());
-				height = Integer.parseInt(entityReader.next());
-				layer = Integer.parseInt(entityReader.next());
-				//Entity Loading
-				//More ID sorting//
-				if(id == 10) {
-					this.addTile(ID.CollisionTile,x,y-40, width, height, layer);
-					handler.addObject(new Chest(ID.Chest,x,y,width,height,layer,back,handler,this),2);
-					System.out.println("CHEST CREATED");
-				}else if(id == 11) {
-					this.addTile(ID.CollisionTile,x,y, width, height, layer);
-					handler.addObject(new Pot(ID.WorldObjectPot,x,y,width,height,layer,back,handler,this),2);
-				}else if(id == 12) {
-					handler.addObject(new NPC(ID.NPC,x,y,width,height,layer,back,handler,this),2);
-				}else if(id == 13) {
-					handler.addObject(new Octorok(ID.Enemy,x,y,width,height,layer,back,handler,this),2);
-				}else if (id == 14) {
-					
-				}else if(id == 15) {
-					handler.addObject(new NPC2(ID.NPC,x,y,width,height,layer,back,handler,this),2);
-				}else if(id == 16) {
-					handler.addObject(new NPC3(ID.NPC,x,y,width,height,layer,back,handler,this),2);
+				//Reading through entire Level2Map File//
+				while(mapReader.hasNext()) {
+					id = Integer.parseInt(mapReader.next());
+					x = Integer.parseInt(mapReader.next());
+					y = Integer.parseInt(mapReader.next());
+					width = Integer.parseInt(mapReader.next());
+					height = Integer.parseInt(mapReader.next());
+					layer = Integer.parseInt(mapReader.next());
+					//Tile Loading
+					//ID sorting so the program knows what is what.//
+					if(id == 1) {
+						this.addTile(ID.Layer1Switch,x,y, width, height, layer);
+					}else if(id == 2) {
+						this.addTile(ID.Layer2Switch,x,y, width, height, layer);
+					}else if(id == 3) {
+						this.addTile(ID.Layer3Switch,x,y, width, height, layer);
+					}else if(id == 4) {
+						this.addTile(ID.CollisionTile,x,y, width, height, layer);
+					}else if(id == 5) {
+						this.addTile(ID.WaterTile,x,y, width, height, layer);
+					}else if(id == 6) {
+						this.addTile(ID.JumpTile,x,y, width, height, layer);
+					}
+					////
 				}
-				//Setting level1Loaded to true so the program knows which shared list to add objects to//
-				//(Line 569)//
-				level2Loaded = true;
-				////
-			}
-			//All of this is the same except for level3 files this time.//
-			try {
-				mapReader = new Scanner(new FileReader(level3MapFile));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			try {
-				entityReader = new Scanner(new FileReader(level3EntityFile));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			mapReader.useDelimiter(",");
-			entityReader.useDelimiter(",");
-			while(mapReader.hasNext()) {
-				id = Integer.parseInt(mapReader.next());
-				x = Integer.parseInt(mapReader.next());
-				y = Integer.parseInt(mapReader.next());
-				width = Integer.parseInt(mapReader.next());
-				height = Integer.parseInt(mapReader.next());
-				layer = Integer.parseInt(mapReader.next());
-				//Tile Loading
-				if(id == 1) {
-					this.addTile(ID.Layer1Switch,x,y, width, height, layer);
-				}else if(id == 2) {
-					this.addTile(ID.Layer2Switch,x,y, width, height, layer);
-				}else if(id == 3) {
-					this.addTile(ID.Layer3Switch,x,y, width, height, layer);
-				}else if(id == 4) {
-					this.addTile(ID.CollisionTile,x,y, width, height, layer);
-				}else if(id == 5) {
-					this.addTile(ID.WaterTile,x,y, width, height, layer);
-				}else if(id == 6) {
-					this.addTile(ID.JumpTile,x,y, width, height, layer);
+				//Reading through entire Leve2EntityMap File//
+				while(entityReader.hasNext()) {
+					id = Integer.parseInt(entityReader.next());
+					x = Integer.parseInt(entityReader.next());
+					y = Integer.parseInt(entityReader.next());
+					width = Integer.parseInt(entityReader.next());
+					height = Integer.parseInt(entityReader.next());
+					layer = Integer.parseInt(entityReader.next());
+					//Entity Loading
+					//More ID sorting//
+					if(id == 10) {
+						this.addTile(ID.CollisionTile,x,y-40, width, height, layer);
+						handler.addObject(new Chest(ID.Chest,x,y,width,height,layer,back,handler,this),count);
+						System.out.println("CHEST CREATED");
+					}else if(id == 11) {
+						this.addTile(ID.CollisionTile,x,y, width, height, layer);
+						handler.addObject(new Pot(ID.WorldObjectPot,x,y,width,height,layer,back,handler,this),count);
+					}else if(id == 12) {
+						handler.addObject(new NPC(ID.NPC,x,y,width,height,layer,back,handler,this),count);
+					}else if(id == 13) {
+						handler.addObject(new Octorok(ID.Enemy,x,y,width,height,layer,back,handler,this),count);
+					}else if (id == 14) {
+						
+					}else if(id == 15) {
+						handler.addObject(new NPC2(ID.NPC,x,y,width,height,layer,back,handler,this),count);
+					}else if(id == 16) {
+						handler.addObject(new NPC3(ID.NPC,x,y,width,height,layer,back,handler,this),count);
+					}
+					//Setting level1Loaded to true so the program knows which shared list to add objects to//
+					//(Line 569)//
+					////
 				}
-			}
-			while(entityReader.hasNext()) {
-				id = Integer.parseInt(entityReader.next());
-				x = Integer.parseInt(entityReader.next());
-				y = Integer.parseInt(entityReader.next());
-				width = Integer.parseInt(entityReader.next());
-				height = Integer.parseInt(entityReader.next());
-				layer = Integer.parseInt(entityReader.next());
-			//Entity Loading
-				if(id == 10) {
-					this.addTile(ID.CollisionTile,x,y-40, width, height, layer);
-					handler.addObject(new Chest(ID.Chest,x,y,width,height,layer,back,handler,this),3);
-					System.out.println("CHEST CREATED");
-				}else if(id == 11) {
-					this.addTile(ID.CollisionTile,x,y, width, height, layer);
-					handler.addObject(new Pot(ID.WorldObjectPot,x,y,width,height,layer,back,handler,this),3);
-				}else if(id == 12) {
-					handler.addObject(new NPC(ID.NPC,x,y,width,height,layer,back,handler,this),3);
-				}else if(id == 13) {
-					handler.addObject(new Octorok(ID.Enemy,x,y,width,height,layer,back,handler,this),3);
-				}else if(id == 14) {
-					
-				}else if(id == 15) {
-					handler.addObject(new NPC2(ID.NPC,x,y,width,height,layer,back,handler,this),3);
-				}else if(id == 16) {
-					handler.addObject(new NPC3(ID.NPC,x,y,width,height,layer,back,handler,this),3);
+				if(count == 0) {
+					level1Loaded = true;
+					System.out.println("LEVEL1");
+				}else if(count == 1) {
+					level2Loaded = true;
+					System.out.println("LEVEL2");
+				}else {
+					System.out.println("LEVEL3");
 				}
+				count++;
 			}
 		}
 		
@@ -611,15 +573,16 @@ public class TileHandler implements MouseListener{
 			temp.setyInd(yInd);
 			temp.setWidth(width);
 			temp.setHeight(height);
-			//This is where level2loaded comes in handy..//
-			if(level2Loaded == false) {
+			//This is where levelloaded comes in handy..//
+			if(level1Loaded == false) {
+				level1Tiles.add(temp);
+			}else if(level2Loaded == false) {
 				level2Tiles.add(temp);
 			}else {
 				level3Tiles.add(temp);
 			}
 			////
 		}
-		//OMEGALUL//
 		public void removeTile(Tile temp) {
 			level2Tiles.remove(temp);
 		}
@@ -629,28 +592,19 @@ public class TileHandler implements MouseListener{
 			PrintWriter mapWriter = null;
 			PrintWriter entityWriter = null;
 			//Determining which level player is on and setting printwriters appropriately.//
-			if(handler.Level2) {
-				try {
+			try {
+			if(handler.Level1) {
+					mapWriter = new PrintWriter(new FileWriter(level1MapFile,true));
+					entityWriter = new PrintWriter(new FileWriter(level1EntityFile,true));
+			}else if(handler.Level2) {
 					mapWriter = new PrintWriter(new FileWriter(level2MapFile,true));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				try {
 					entityWriter = new PrintWriter(new FileWriter(level2EntityFile,true));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 			}else if(handler.Level3) {
-				try {
 					mapWriter = new PrintWriter(new FileWriter(level3MapFile,true));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				try {
 					entityWriter = new PrintWriter(new FileWriter(level3EntityFile,true));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			}
+			}catch(IOException e) {
+				e.printStackTrace();
 			}
 			/////
 			//Testing for which mode the editor is in currently and testing id and then writing out data//

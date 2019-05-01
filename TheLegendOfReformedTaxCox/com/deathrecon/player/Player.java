@@ -28,7 +28,7 @@ public class Player extends GameObject{
 	public Handler handler;
 	public PlayerAnimation player;
 	public int HP = 6;
-	public int RupCount = 10;
+	public int RupCount = 0;
 	public double SHIELD = 1;
 	public int movementAnim = 0;
 	int Sword = 0;
@@ -85,7 +85,6 @@ public class Player extends GameObject{
 						handler.edgeY = false;
 					}
 				}else {
-					System.out.println("TRIGGERING");
 					if(newY < 520) {
 						handler.edgeY = false;
 					}
@@ -185,27 +184,26 @@ public class Player extends GameObject{
 			if(player.slashing == true) {
 				if(movementAnim == 0) {
 					player.Slash(movementAnim);
-					g.drawImage(imageTile,(int)this.getX()-100,(int)this.getY()-75,170,130,null);
+					g.drawImage(imageTile,(int)this.getX()-90,(int)this.getY()-75,180,130,null);
 					g.drawRect((int)this.getX()-65,(int)this.getY()-20,160,30);
 				}
 				if(movementAnim == 1) {
 					player.Slash(movementAnim);
-					g.drawImage(imageTile,(int)this.getX()-40,(int)this.getY()-45,170,150,null);
+					g.drawImage(imageTile,(int)this.getX()-40,(int)this.getY()-45,180,150,null);
 					g.drawRect((int)this.getX()+55,(int)this.getY()-40,50,150);
 				}
 				if(movementAnim == 2) {
 					player.Slash(movementAnim);
-					g.drawImage(imageTile,(int)this.getX()-50,(int)this.getY()-10,170,100,null);
+					g.drawImage(imageTile,(int)this.getX()-50,(int)this.getY()-15,180,110,null);
 					g.drawRect((int)this.getX()-35,(int)this.getY()+50,150,30);
 				}
 				if(movementAnim == 3) {
 					player.Slash(movementAnim);
-					g.drawImage(imageTile,(int)this.getX()-120,(int)this.getY()-45,170,150,null);
+					g.drawImage(imageTile,(int)this.getX()-95,(int)this.getY()-55,180,160,null);
 					g.drawRect((int)this.getX()-60,(int)this.getY()-40,50,150);
 				}
 				handler.updateEnemies();
 			}else {
-				handler.refresh();
 				player.Walk(movementAnim);
 				g.drawImage(imageTile,(int)this.getX()-25,(int)this.getY()-40,100,100,null);
 				g.setColor(Color.RED);

@@ -157,7 +157,7 @@ public class PlayerAnimation{
 		} 
 		if(slashing) {
 			if(currentFrame < 7) {
-				if(timer == 2) {
+				if(timer == 1) {
 					currentFrame++;
 					timer = 0;
 				}
