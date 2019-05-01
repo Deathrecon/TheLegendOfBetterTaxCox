@@ -102,11 +102,15 @@ public void loadHud() {
 		
 		//1
 		g.drawImage(slot, (int) getX()+ 100, 50 , 100, 100, null);
-		g.drawImage(Sword, (int) getX()+ 115, 50+15 , 70, 70, null);
+		if(player.hasSword) {
+			g.drawImage(Sword, (int) getX()+ 115, 50+15 , 70, 70, null);
+		}
 		
 		//2
 		g.drawImage(slot, (int) getX() + 250, 50 , 100, 100, null);
-		g.drawImage(Shield, (int) getX() + 265, 65 , 70, 70, null);
+		if(player.hasShield) {
+			g.drawImage(Shield, (int) getX() + 265, 65 , 70, 70, null);
+		}
 	}
 
 	@Override

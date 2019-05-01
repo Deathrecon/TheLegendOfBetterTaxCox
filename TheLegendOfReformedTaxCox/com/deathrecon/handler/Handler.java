@@ -106,7 +106,6 @@ public class Handler {
 					temp = entitiesLevel3.get(i);
 					if(temp.getId() == ID.Rupee) {
 						if(player.getBounds().intersects(temp.getBounds())) {
-							System.out.println("HELLO?");
 							temp.setX(-10000000);
 							player.RupCount += 10;
 						}
@@ -138,7 +137,6 @@ public class Handler {
 					temp = entitiesLevel2.get(i);
 					if(temp.getId() == ID.Rupee) {
 						if(player.getBounds().intersects(temp.getBounds())) {
-							System.out.println("HELLO?");
 							temp.setX(-10000000);
 							player.RupCount += 10;
 						}
@@ -157,13 +155,15 @@ public class Handler {
 						map.setY(0);
 					}
 					//player.setY(player.getY()+2);
+					map.loadImage();
+					map.layer3.loadImage();
 					map.layer3.setImage("Layer2Level1.png");
 					map.layer3.setHeight(4000);
 					map.layer3.setY(map.getX());
 					map.setVelY(0);
 					map.loadImage();
-					map.layer3.loadImage();
 					changedLevel1 = true;
+					map.layer3.loadImage();
 				}
 				changedLevel2 = false;
 				changedLevel3 = false;
@@ -172,7 +172,6 @@ public class Handler {
 					temp = entitiesLevel1.get(i);
 					if(temp.getId() == ID.Rupee) {
 						if(player.getBounds().intersects(temp.getBounds())) {
-							System.out.println("HELLO?");
 							temp.setX(-10000000);
 							player.RupCount += 10;
 						}
@@ -200,7 +199,6 @@ public class Handler {
 					temp = entitiesLinkHouse.get(i);
 					if(temp.getId() == ID.Rupee) {
 						if(player.getBounds().intersects(temp.getBounds())) {
-							System.out.println("HELLO?");
 							temp.setX(-10000000);
 							player.RupCount += 10;
 						}
@@ -263,7 +261,7 @@ public class Handler {
 					tempLayer1.render(g);
 					tempLayer2.render(g);
 				}
-				if(Level2 || Level3) {
+				if(Level1 || Level2 || Level3) {
 					tempLayer3.render(g);
 				}
 				tempHearts.render(g);
@@ -277,7 +275,7 @@ public class Handler {
 				if(Level2) {
 					tempLayer2.render(g);
 				}
-				if(Level2 || Level3){
+				if(Level1 || Level2 || Level3){
 					tempLayer3.render(g);
 				}
 				tempHearts.render(g);
@@ -289,7 +287,7 @@ public class Handler {
 					tempLayer2.render(g);
 				}
 				tempPlayer.render(g);
-				if(Level2 || Level3) {
+				if(Level1 || Level2 || Level3) {
 					tempLayer3.render(g);
 				}
 				tempHearts.render(g);
@@ -336,44 +334,46 @@ public class Handler {
 			}
 			for(int i = 0; i < currentList.size(); i++) {
 				GameObject temp = currentList.get(i);
-				if(this.isSpace()) {
-					if(player.movementAnim == 0) {
-						if(temp.getBounds().intersects(player.getSlashUpBounds())) {
-							if(temp.getHP() > 0) {
-								if(temp.isHit() == false) {
-									temp.setHP(temp.getHP()-1);
-									temp.setHit(true);
+				if(player.hasSword) {
+					if(this.isSpace()) {
+						if(player.movementAnim == 0) {
+							if(temp.getBounds().intersects(player.getSlashUpBounds())) {
+								if(temp.getHP() > 0) {
+									if(temp.isHit() == false) {
+										temp.setHP(temp.getHP()-1);
+										temp.setHit(true);
+									}
 								}
 							}
 						}
-					}
-					if(player.movementAnim == 3) {
-						if(temp.getBounds().intersects(player.getSlashLeftBounds())) {
-							if(temp.getHP() > 0) {
-								if(temp.isHit() == false) {
-									temp.setHP(temp.getHP()-1);
-									temp.setHit(true);
+						if(player.movementAnim == 3) {
+							if(temp.getBounds().intersects(player.getSlashLeftBounds())) {
+								if(temp.getHP() > 0) {
+									if(temp.isHit() == false) {
+										temp.setHP(temp.getHP()-1);
+										temp.setHit(true);
+									}
 								}
 							}
 						}
-					}
-					if(player.movementAnim == 2) {
-						if(temp.getBounds().intersects(player.getSlashDownBounds())) {
-							if(temp.getHP() > 0) {
-								if(temp.isHit() == false) {
-									temp.setHP(temp.getHP()-1);
-									temp.setHit(true);
+						if(player.movementAnim == 2) {
+							if(temp.getBounds().intersects(player.getSlashDownBounds())) {
+								if(temp.getHP() > 0) {
+									if(temp.isHit() == false) {
+										temp.setHP(temp.getHP()-1);
+										temp.setHit(true);
+									}
 								}
 							}
 						}
-					}
-					if(player.movementAnim == 1) {
-						if(temp.getBounds().intersects(player.getSlashRightBounds())) {
-							if(temp.getHP() > 0) {
-								if(temp.isHit() == false) {
-									temp.setHP(temp.getHP()-1);
-									temp.setHit(true);
-									testEnemy = temp;
+						if(player.movementAnim == 1) {
+							if(temp.getBounds().intersects(player.getSlashRightBounds())) {
+								if(temp.getHP() > 0) {
+									if(temp.isHit() == false) {
+										temp.setHP(temp.getHP()-1);
+										temp.setHit(true);
+										testEnemy = temp;
+									}
 								}
 							}
 						}

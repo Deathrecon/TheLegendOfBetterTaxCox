@@ -43,6 +43,7 @@ public class Chest extends GameObject{
 	public boolean collided = false;
 	public boolean collisionPlaced = false;
 	public boolean initialized = false;
+	public boolean open = false;
 	float lastX = 0;
 	float lastY = 0;
 	float newX = 0;
@@ -86,28 +87,22 @@ public class Chest extends GameObject{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		try {
+			EmptyChest = ImageIO.read(Empty);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public void getSprite(int x,int y) {
+	public void getSpriteFull(int x,int y) {
 		int SIZEX = 20;
 		int SIZEY = 20;
-		if(second) {
-			y+=4;
-		}
 		imageTile = FullChest.getSubimage(x*SIZEX, y*SIZEY, 16, 16);
-		if(moving == true) {
-			if(currentFrame < 1) {
-					currentFrame++;
-			}else {
-				currentFrame = 0;
-			}
-			
-		}else {
-			firstRun = true;
-			currentFrame = 0;
-			second = false;
-			subtract = false;
-		}
+	}
+	public void getSpriteEmpty(int x,int y) {
+		int SIZEX = 20;
+		int SIZEY = 20;
+		imageTile = EmptyChest.getSubimage(x*SIZEX, y*SIZEY, 16, 16);
 	}
 
 	@Override
@@ -143,10 +138,27 @@ public class Chest extends GameObject{
 		
 	}
 	public void render(Graphics g) {
-		getSprite(currentFrame,movementAnim);
-		g.drawImage(imageTile,(int)this.getX(),(int)this.getY()-40,70,70,null);
-		g.setColor(Color.RED);
-		g.drawRect((int)this.getX(),(int)this.getY()-40,70,70);
+		if(open == false) {
+			getSpriteFull(currentFrame,movementAnim);
+			g.drawImage(imageTile,(int)this.getX(),(int)this.getY()-40,70,70,null);
+		}else {
+			getSpriteEmpty(currentFrame,movementAnim);
+			g.drawImage(imageTile,(int)this.getX(),(int)this.getY()-40,70,70,null);
+		}
+		
+		if(handler.player.getX() <= this.getX()+this.getWidth()+30 && handler.player.getX() > this.getX()-this.getWidth()-30){
+			
+			if(handler.player.getY() < this.getY()+this.getHeight()+ 30 && handler.player.getY() > this.getY() - this.getHeight() -60) {
+				
+				if(handler.isSpace()) {
+					handler.player.player.slashing = false;
+					open = true;
+					handler.player.hasSword = true;
+				}
+			
+			}
+			
+		}
 		
 	}
 

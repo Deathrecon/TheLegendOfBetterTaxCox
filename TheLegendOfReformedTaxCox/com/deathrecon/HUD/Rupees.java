@@ -45,7 +45,6 @@ public class Rupees extends HUD{
 
 	@Override
 	public void render(Graphics g) {
-		// TODO Auto-generated method stub
 		g.drawImage(image, (int) getX(), (int) getY(), getWidth(), getHeight()+6, null);
 	
 	}

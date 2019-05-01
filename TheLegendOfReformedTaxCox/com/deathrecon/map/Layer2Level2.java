@@ -24,7 +24,6 @@ public class Layer2Level2 extends GameObject{
 		loadImage();
 	}
 	public void loadImage() {
-			System.out.println("REPEATING?");
 			File file = new File("MapLayer2.png");
 			try {
 				image = ImageIO.read(file);

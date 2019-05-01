@@ -74,8 +74,10 @@ public class Rupee extends GameObject{
 	@Override
 	public void render(Graphics g) {
 		g.drawImage(image,(int)this.getX(),(int)this.getY(),this.getWidth(),this.getHeight(),null);
-		g.setColor(Color.RED);
-		g.drawRect((int)this.getX(),(int)this.getY(), 30, 40);
+		if(this.getTileHandler().debug) {
+			g.setColor(Color.RED);
+			g.drawRect((int)this.getX(),(int)this.getY(), 30, 40);
+		}
 	}
 
 	public Rectangle getBounds() {

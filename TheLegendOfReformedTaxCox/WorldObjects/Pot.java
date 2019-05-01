@@ -101,25 +101,23 @@ public class Pot extends GameObject {
 		}
 		this.setY(newY);
 		this.setX(newX);
-		if(handler.isSpace()) {
+		if(handler.player.hasSword) {
+			if(handler.isSpace()) {
 				if(this.getBounds().intersects(handler.player.getSlashDownBounds()) || this.getBounds().intersects(handler.player.getSlashUpBounds()) || this.getBounds().intersects(handler.player.getSlashLeftBounds()) || this.getBounds().intersects(handler.player.getSlashRightBounds())){
 					hit = true;
 					if(hit) {
-					vaseHealth--;
-					hit = false;
-					
+						vaseHealth--;
+						hit = false;
+					}
+				}
 			}
 		}
 	}
-	
-		
-}
 
 	@Override
 	public void render(Graphics g) {
 		if(this.vaseHealth > 0) {
 		g.drawImage(Vase,(int)this.getX(),(int)this.getY(),50,50,null);
-		
 	}else {
 		if(rupeeDropped == false) {
 			handler.addObject(new Rupee(ID.Rupee,(int)this.getX() - (int)map.getX(),(int)this.getY() - (int)map.getY(),30,40,this.getLayer(),this.getMap(),this.getHandler(),this.getTileHandler()), this.getLevel());

@@ -11,6 +11,7 @@ import com.deathrecon.handler.Handler;
 public class PlayerAnimation{
 	private BufferedImage imageWalk;
 	private BufferedImage imageSlash;
+	private BufferedImage imageSwim;
 	private BufferedImage imageTile;
 	private Player player;
 	public Handler handler;
@@ -23,6 +24,7 @@ public class PlayerAnimation{
 	public boolean second = false;
 	public boolean moving = false;
 	public boolean slashing = false;
+	public boolean swimming = false;
 	public boolean spaceReleased = false;
 	public int timer = 0;
 	
@@ -41,6 +43,12 @@ public class PlayerAnimation{
 		file = new File("Slash3.png");
 		try {
 			imageSlash = ImageIO.read(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		file = new File("Swim.png");
+		try {
+			imageSwim = ImageIO.read(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -170,4 +178,43 @@ public class PlayerAnimation{
 			}
 		}
 	}
+	public void Swim(int y) {
+		int SIZEX = 0;
+		int SIZEY = 0;
+		if(currentFrame == 0) {
+			SIZEX = 29;
+			SIZEY = 25;
+		}else{
+			SIZEX = 29;
+			SIZEY = 25;
+		}
+        ////
+        //Takes the bufferedimage and creates a window with the x being the current frame times the sizeX
+        //and the y being the currentAnim times the sizeY.//
+        //The last two numbers are representative for the width and height of the sub image you're creating//
+        if(y == 0) {
+        	imageTile = imageSwim.getSubimage(currentFrame*SIZEX, y*SIZEY, 32, 26);	
+        }else if(y == 1) {
+        	imageTile = imageSwim.getSubimage(currentFrame*SIZEX, y*SIZEY + 5, 32, 26);
+        }else if(y == 2){
+        	imageTile = imageSwim.getSubimage(currentFrame*SIZEX, y*SIZEY, 32, 26);	
+        }else if(y == 3) {
+        	imageTile = imageSwim.getSubimage(currentFrame*SIZEX, y*SIZEY+5, 32, 26);	
+        }
+        
+        player.imageTile = imageTile;
+        
+        if(swimming) {
+			if(currentFrame < 7) {
+				if(timer == 5) {
+					currentFrame++;
+					timer = 0;
+				}
+				timer++;
+			}else {
+				currentFrame = 0;
+			}
+		}
+        
+    }
 }

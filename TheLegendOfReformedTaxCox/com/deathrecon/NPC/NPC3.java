@@ -170,8 +170,8 @@ public class NPC3 extends GameObject{
 		if(this.getHP() > 0) {
 			getSprite(movementAnim);
 			g.drawImage(imageTile,(int)this.getX()-25,(int)this.getY()-40,70,70,null);
-			g.setColor(Color.RED);
-			g.drawRect((int)this.getX()-15,(int)this.getY()-25, 60, 55);
+			//g.setColor(Color.RED);
+			//g.drawRect((int)this.getX()-15,(int)this.getY()-25, 60, 55);
 			
 			if(handler.player.getX() <= this.getX()+this.getWidth()+30 && handler.player.getX() > this.getX()-this.getWidth()-30){
 				

@@ -53,6 +53,7 @@ public class Game extends JPanel implements ActionListener {
 	private HUD hud;
 	private Hearts lifeBar;
 	private Rupees rups;
+	public File title = new File("enterPress.wav");
 	
 	public Game(Dimension dim) {
 		this.setPreferredSize(dim);

@@ -7,8 +7,6 @@ import javax.sound.sampled.Clip;
 
 public class AudioPlayer {
 	Clip clip;
-	
-	
 	public void playSound(File Sound) {
 		try {
 			clip = AudioSystem.getClip();

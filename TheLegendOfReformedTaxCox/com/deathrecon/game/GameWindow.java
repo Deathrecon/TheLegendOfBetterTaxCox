@@ -1,4 +1,4 @@
-package com.deathrecon.game;
+/*package com.deathrecon.game;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -29,4 +29,4 @@ public class GameWindow {
 	public static void main(String[] args) {
 		GameWindow gameWindow = new GameWindow("The Legend Of Rynn");
 	}
-}
+}*/

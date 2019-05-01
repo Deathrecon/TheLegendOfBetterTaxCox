@@ -59,10 +59,8 @@ public class NPC extends GameObject implements ActionListener{
 		this.setY(702);
 		this.setHeight(100);
 		this.setWidth(100);
-
 		handler = this.getHandler();
 		map = this.getMap();
-		System.out.println("IS THIS RUNNING?");
 		loadImage();
 	}
 	
@@ -183,8 +181,8 @@ public class NPC extends GameObject implements ActionListener{
 		if(this.getHP() > 0) {
 			getSprite(currentFrame,movementAnim);
 			g.drawImage(imageTile,(int)this.getX()-25,(int)this.getY()-40,70,70,null);
-			g.setColor(Color.RED);
-			g.drawRect((int)this.getX()-15,(int)this.getY()-25, 60, 55);
+			//g.setColor(Color.RED);
+			//g.drawRect((int)this.getX()-15,(int)this.getY()-25, 60, 55);
 			
 			if(handler.player.getX() <= this.getX()+this.getWidth()+30 && handler.player.getX() > this.getX()-this.getWidth()-30){
 				

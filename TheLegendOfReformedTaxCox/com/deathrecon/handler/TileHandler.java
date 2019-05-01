@@ -1,5 +1,4 @@
 package com.deathrecon.handler;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -14,7 +13,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.Scanner;
-
 import com.deathrecon.Enum.ID;
 import com.deathrecon.Item.Chest;
 import com.deathrecon.NPC.NPC;
@@ -27,9 +25,15 @@ import com.deathrecon.map.BackgroundMove;
 import com.deathrecon.player.Player;
 import com.deathrecon.tilemap.LayerTile;
 import com.deathrecon.tilemap.Tile;
-
 import WorldObjects.Pot;
 import WorldObjects.World;
+/**
+ * Handler Class to Manage Various Different Types Of Collision Tiles and Distinguish them.
+ * Also serves as a real-time editor that can save entities and tiles to the map files.
+ * 
+ * @author Jordan
+ *
+ */
 public class TileHandler implements MouseListener{
 		
 	//Level Tile Arrays
@@ -90,6 +94,10 @@ public class TileHandler implements MouseListener{
 			initTiles();
 		}
 		
+		/**
+		 * Updates the current Level and all the tiles within and continuosly check for player collisions with them.
+		 * @param String
+		 */
 		public void update() {
 			//Edge Updates and Current Tile Update
 			edgeY = handler.edgeY;
@@ -114,7 +122,11 @@ public class TileHandler implements MouseListener{
 				temp.setY(back.getY()+ temp.getyInd());
 				temp.update();
 				/////
-				
+				if(temp.getId() == ID.WaterTile) {
+					if(player.getBounds().intersects(temp.getBounds())) {
+						handler.player.player.swimming = true;
+					}
+				}
 				//Begin Collision Test//
 				//If player intersects the object
 				if(player.getBounds().intersects(temp.getBounds())) {
@@ -235,8 +247,6 @@ public class TileHandler implements MouseListener{
 								handler.linkHouse = true;
 								handler.Level1 = false;
 	
-							}else {
-								System.out.println("TEMP ID: " + temp.getId());
 							}
 						}
 						//Test for layer switch. (All layer switches are on layer 0)//
@@ -418,7 +428,26 @@ public class TileHandler implements MouseListener{
 					}
 				}
 			}
+			if(handler.player.player.swimming) {
+				boolean colliding = false;
+				for(int i = 0; i < currentLevelTiles.size(); i++){
+					Tile temp = currentLevelTiles.get(i);
+					if(temp.getId() == ID.WaterTile) {
+						if(player.getBounds().intersects(temp.getBounds())) {
+							colliding = true;
+						}
+					}
+				}
+				if(colliding == false) {
+					handler.player.player.swimming = false;
+					handler.player.player.timer = 0;
+				}
+			}
 		}
+		/**
+		 * Render method renders all working tiles and editor HUD elements if F1 is pressed
+		 * @param String
+		 */
 		//Render method in this class is strictly for the debug editor//
 		public void render(Graphics g) {
 			if(debug) {
@@ -480,6 +509,10 @@ public class TileHandler implements MouseListener{
 
 		}
 		
+		/**
+		 * Reads in data from Collision Map Files and Entity Map Files and adds the appropriate object based on the data received.
+		 * @param String
+		 */
 		//Initialization of tile files//
 		public void initTiles() {
 			File currentCollisionMap = null;
@@ -559,7 +592,6 @@ public class TileHandler implements MouseListener{
 					if(id == 10) {
 						this.addTile(ID.CollisionTile,x,y-40, width, height, layer);
 						handler.addObject(new Chest(ID.Chest,x,y,width,height,layer,back,handler,this),count);
-						System.out.println("CHEST CREATED");
 					}else if(id == 11) {
 						this.addTile(ID.CollisionTile,x,y, width, height, layer);
 						handler.addObject(new Pot(ID.WorldObjectPot,x,y,width,height,layer,back,handler,this),count);
@@ -580,13 +612,10 @@ public class TileHandler implements MouseListener{
 				}
 				if(count == 0) {
 					level1Loaded = true;
-					System.out.println("LEVEL1");
 				}else if(count == 1) {
 					level2Loaded = true;
-					System.out.println("LEVEL2");
 				}else if(count == 2){
 					level3Loaded = true;
-					System.out.println("LEVEL3");
 				}else if(count == 3) {
 					linkHouseLoaded = true;
 				}
@@ -594,7 +623,11 @@ public class TileHandler implements MouseListener{
 			}
 		}
 		
-		
+		/**
+		 *  Adds Tiles appropriately to their level.
+		 * @param String
+		 * 
+		 */
 		public void addTile(ID id, int xInd, int yInd, int width, int height, int layer) {
 			Tile temp = new LayerTile();
 			temp.setLayer(layer);

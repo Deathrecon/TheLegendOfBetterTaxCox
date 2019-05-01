@@ -31,6 +31,8 @@ public class Player extends GameObject{
 	public int RupCount = 0;
 	public double SHIELD = 1;
 	public int movementAnim = 0;
+	public boolean hasSword = false;
+	public boolean hasShield = false;
 	int Sword = 0;
 	public Player() {
 		this.setLayer(3);
@@ -44,10 +46,12 @@ public class Player extends GameObject{
 
 	@Override
 	public void update() {
-		if(handler.isSpace()) {
-			player.handler = this.handler;
-			player.slashing = true;
-			player.moving = false;
+		if(hasSword) {
+			if(handler.isSpace()) {
+				player.handler = this.handler;
+				player.slashing = true;
+				player.moving = false;
+			}
 		}
 		getMovement();
 		this.setHP(HP);
@@ -186,33 +190,51 @@ public class Player extends GameObject{
 	@Override
 	public void render(Graphics g) {
 		if(this.HP > 0) {
-			if(player.slashing == true) {
+			if(player.slashing == true && player.swimming == false) {
 				if(movementAnim == 0) {
 					player.Slash(movementAnim);
 					g.drawImage(imageTile,(int)this.getX()-90,(int)this.getY()-75,180,130,null);
-					g.drawRect((int)this.getX()-65,(int)this.getY()-20,160,30);
+					//g.drawRect((int)this.getX()-65,(int)this.getY()-20,160,30);
 				}
 				if(movementAnim == 1) {
 					player.Slash(movementAnim);
 					g.drawImage(imageTile,(int)this.getX()-40,(int)this.getY()-45,180,150,null);
-					g.drawRect((int)this.getX()+55,(int)this.getY()-40,50,150);
+					//g.drawRect((int)this.getX()+55,(int)this.getY()-40,50,150);
 				}
 				if(movementAnim == 2) {
 					player.Slash(movementAnim);
 					g.drawImage(imageTile,(int)this.getX()-50,(int)this.getY()-15,180,110,null);
-					g.drawRect((int)this.getX()-35,(int)this.getY()+50,150,30);
+					//g.drawRect((int)this.getX()-35,(int)this.getY()+50,150,30);
 				}
 				if(movementAnim == 3) {
 					player.Slash(movementAnim);
 					g.drawImage(imageTile,(int)this.getX()-95,(int)this.getY()-55,180,160,null);
-					g.drawRect((int)this.getX()-60,(int)this.getY()-40,50,150);
+					//g.drawRect((int)this.getX()-60,(int)this.getY()-40,50,150);
 				}
 				handler.updateEnemies();
+			}else if(player.swimming == true){
+				player.slashing = false;
+				if(movementAnim == 0) {
+					player.Swim(movementAnim);
+					g.drawImage(imageTile,(int)this.getX()-28,(int)this.getY()-20,100,100,null);
+				}
+				if(movementAnim == 1) {
+					player.Swim(movementAnim);
+					g.drawImage(imageTile,(int)this.getX()-28,(int)this.getY()-10,100,100,null);
+				}
+				if(movementAnim == 2) {
+					player.Swim(movementAnim);
+					g.drawImage(imageTile,(int)this.getX()-26,(int)this.getY()-30,100,100,null);
+				}
+				if(movementAnim == 3) {
+					player.Swim(movementAnim);
+					g.drawImage(imageTile,(int)this.getX()-28,(int)this.getY()-10,100,100,null);
+				}
 			}else {
 				player.Walk(movementAnim);
 				g.drawImage(imageTile,(int)this.getX()-25,(int)this.getY()-40,100,100,null);
-				g.setColor(Color.RED);
-				g.drawRect((int)this.getX()-5,(int)this.getY()+25,58,35);
+				//g.setColor(Color.RED);
+				//g.drawRect((int)this.getX()-5,(int)this.getY()+25,58,35);
 			}
 		}		
 	}
